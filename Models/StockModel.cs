@@ -12,6 +12,4 @@
 		public long t { get; set; } // TimeStamps
 	}
 
-
-
 }

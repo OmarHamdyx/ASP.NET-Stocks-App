@@ -5,23 +5,19 @@ namespace StocksApp.Controllers
 {
 	public class StocksAppController : Controller
 	{
-		private readonly IStocksAppService _stocksAppService;
-		private readonly ICompanyNameService _companyNameService;
+		private readonly IGetStockModelViewService _getStockModelView;
 
-		public StocksAppController(IStocksAppService stocksAppService,ICompanyNameService companyNameService)
+		public StocksAppController(IGetStockModelViewService getStockModelView)
 		{
-			_stocksAppService = stocksAppService;
-			_companyNameService = companyNameService;
+			_getStockModelView = getStockModelView;
 		}
-
 
 		[Route("/")]
 		[Route("/{symbol}")]
 		public async Task<IActionResult> GetStockDetails(string? symbol)
 		{
-			ViewBag.CompanyName=await _companyNameService.GetCompanyInfoAsync(symbol);
-			ViewBag.StockDetails=await _stocksAppService.GetStockModelAsync(symbol);
-			return View();
+			StockDetailsViewModel stockDetailsViewModel =  await _getStockModelView.GetStockDetailsViewModel(symbol);
+			return View(stockDetailsViewModel);
 		}
 	}
 }
