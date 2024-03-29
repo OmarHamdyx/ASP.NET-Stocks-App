@@ -18,7 +18,7 @@ namespace Services
 		{
 			
 			StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
-			CompanyInfo? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
+			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
 			StockDetailsViewModel? stockDetailsViewModel = new StockDetailsViewModel();
 			stockDetailsViewModel.StockName = companyInfo.Name;
 			stockDetailsViewModel.StockSymbol = companyInfo.Ticker;

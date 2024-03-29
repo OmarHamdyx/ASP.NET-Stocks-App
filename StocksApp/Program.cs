@@ -4,12 +4,12 @@ using Models;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
-builder.Services.Configure<DefaultSymbol>(builder.Configuration.GetSection("DefaultSymbol"));
+builder.Services.Configure<DefaultSymbolOption>(builder.Configuration.GetSection("DefaultSymbol"));
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IFinnhubService, FinnhubService>();
+builder.Services.AddSingleton<IFinnhubService, FinnhubService>();
 builder.Services.AddScoped<IGetStockModelViewService, GetStockModelViewService>();
 
 var app = builder.Build();
-
+app.UseRouting();
 app.MapControllers();
 app.Run();

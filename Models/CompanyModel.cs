@@ -1,4 +1,4 @@
-﻿public class CompanyInfo
+﻿public class CompanyModel
 {
 	public string? Country { get; set; }
 	public string? Currency { get; set; }
