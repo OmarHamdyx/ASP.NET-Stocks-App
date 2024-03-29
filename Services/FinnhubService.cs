@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Models;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 
 namespace Services
@@ -10,19 +11,24 @@ namespace Services
     public class FinnhubService : IFinnhubService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly IConfiguration _configuration;
-        private readonly DefaultSymbol _defaultSymbol;
 
-		public FinnhubService(IHttpClientFactory httpClientFactory, IConfiguration configuration,IOptions<DefaultSymbol> defaultSymbol)
+        private readonly IConfiguration _configuration;
+
+        private readonly DefaultSymbolOption _defaultSymbol;
+
+		public FinnhubService(IHttpClientFactory httpClientFactory, IConfiguration configuration,IOptions<DefaultSymbolOption> defaultSymbol)
         {
             _defaultSymbol = defaultSymbol.Value;
+
 			_httpClientFactory = httpClientFactory;
+
 			_configuration = configuration;
 		}
 
 		public async Task<StockModel?> GetStockInfoAsync(string? symbol)
         {
 			symbol ??= _defaultSymbol.Symbol;
+
             using (HttpClient httpClient = _httpClientFactory.CreateClient())
             { 
                 HttpResponseMessage? httpResponseMessage =await httpClient.GetAsync($"https://finnhub.io/api/v1/quote?symbol={symbol}&token={_configuration["FinnhubApiKey"]}");
@@ -30,8 +36,23 @@ namespace Services
                 if (httpResponseMessage !=null)
                 {
 					string respnseAsString = await httpResponseMessage.Content.ReadAsStringAsync();
-					StockModel? stockModel = JsonConvert.DeserializeObject<StockModel>(respnseAsString);
-                    return stockModel;  
+					
+					JObject responseObject = JObject.Parse(respnseAsString);
+
+					// Iterate over each property in the JObject
+					foreach (JProperty property in responseObject.Properties())
+					{
+						// Check if the value is null, if so, set it to zero
+						if (property.Value.Type == JTokenType.Null)
+						{
+							property.Value = JToken.FromObject(0);
+						}
+					}
+
+					// Deserialize the modified JObject back to a StockModel object
+					StockModel? stockModel = responseObject.ToObject<StockModel>();
+
+					return stockModel;
 				}
 				else 
                 {
@@ -40,7 +61,7 @@ namespace Services
 				}
 			}
 		}
-		public async Task<CompanyInfo?> GetCompanyInfoAsync(string? symbol)
+		public async Task<CompanyModel?> GetCompanyInfoAsync(string? symbol)
 		{
 			symbol ??= _defaultSymbol.Symbol;
 
@@ -51,7 +72,9 @@ namespace Services
 				if (httpResponseMessage != null)
 				{
 					string jsonString = await httpResponseMessage.Content.ReadAsStringAsync();
-					CompanyInfo? companyInfo = JsonConvert.DeserializeObject<CompanyInfo>(jsonString);
+
+					CompanyModel? companyInfo = JsonConvert.DeserializeObject<CompanyModel>(jsonString);
+
 					return companyInfo;
 				}
 				else

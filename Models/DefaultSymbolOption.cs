@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
-	public class DefaultSymbol
+	public class DefaultSymbolOption
 	{
 		public string? Symbol { get; set; }
 	}
