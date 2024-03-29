@@ -12,13 +12,13 @@ namespace StocksApp.Controllers
 		{
 			_getStockModelView = getStockModelView;
 		}
-		
+
 		[Route("/")]
 		[Route("[action]")]
-		[Route("/{symbol}")]
-		public async Task<IActionResult> GetStockDetails(string? symbol)
+        [Route("/{symbol:regex(^[[a-zA-Z]]{{4}}$)}")]
+        public async Task <IActionResult> GetStockDetails(string? symbol)
 		{
-			StockDetailsViewModel stockDetailsViewModel =  await _getStockModelView.GetStockDetailsViewModel(symbol);
+			StockDetailsViewModel stockDetailsViewModel = await _getStockModelView.GetStockDetailsViewModel(symbol);
 			return View(stockDetailsViewModel);
 		}
 	}
