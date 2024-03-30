@@ -7,18 +7,21 @@ namespace StocksApp.Controllers
 	public class StocksAppController : Controller
 	{
 		private readonly IGetStockModelViewService _getStockModelView;
+        private readonly IConfiguration _configuration;
 
-		public StocksAppController(IGetStockModelViewService getStockModelView)
+        public StocksAppController(IGetStockModelViewService getStockModelView,IConfiguration configuration)
 		{
 			_getStockModelView = getStockModelView;
-		}
+            _configuration = configuration;
+        }
 
-		[Route("/")]
 		[Route("[action]")]
-        [Route("/{symbol:regex(^[[a-zA-Z]]{{4}}$)}")]
+        [Route("/[controller]/{symbol}")]
         public async Task <IActionResult> GetStockDetails(string? symbol)
 		{
+			ViewBag.Token=_configuration["finnhubapikey"];
 			StockDetailsViewModel stockDetailsViewModel = await _getStockModelView.GetStockDetailsViewModel(symbol);
+		
 			return View(stockDetailsViewModel);
 		}
 	}

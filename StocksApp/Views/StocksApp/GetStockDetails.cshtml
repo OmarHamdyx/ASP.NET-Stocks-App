@@ -1,8 +1,13 @@
 ﻿@model StockDetailsViewModel
 
-<a  class="block max-w-sm p-10 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-50 dark:border-gray-700">
-	<i class="fa-solid fa-money-bill-trend-up"></i>
+<a class="block max-w-sm p-10 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-50 dark:border-gray-700">
+    <i class="fa-solid fa-money-bill-trend-up"></i>
 
-	<h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-800 dark:text-grey-800">@Model.StockName (@Model.StockSymbol)</h5>
-	<p class="font-bold text-gray-800 dark:text-gray-800">@Model.StockPrice</p>
+    <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-800 dark:text-grey-800">@Model.StockName (@Model.StockSymbol)</h5>
+    <p class="font-bold text-gray-800 dark:text-gray-800"><span class="stock-price">@Model.StockPrice.ToString("N")</span></p>
 </a>
+<input type="hidden" id="StockSymbol" value="@Model.StockSymbol" />
+<input type="hidden" id="FinnhubToken" value="@ViewBag.Token" />
+@section Scripts {
+    <script src="/Scripts/GetStockDetailsScript.js"></script>
+}
