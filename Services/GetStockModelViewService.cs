@@ -22,7 +22,7 @@ namespace Services
 			StockDetailsViewModel? stockDetailsViewModel = new StockDetailsViewModel();
 			stockDetailsViewModel.StockName = companyInfo.Name;
 			stockDetailsViewModel.StockSymbol = companyInfo.Ticker;
-			stockDetailsViewModel.StockPrice = stockModel.c;
+			stockDetailsViewModel.StockPrice = stockModel.C;
 
 			return stockDetailsViewModel;
 		}
