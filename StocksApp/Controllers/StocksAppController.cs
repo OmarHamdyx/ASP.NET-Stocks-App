@@ -3,7 +3,7 @@ using Domain.ViewModels;
 using Application.Interfaces;
 namespace StocksApp.Controllers
 {
-
+	[Controller]
     public class StocksAppController : Controller
 	{
 		private readonly IGetStockModelViewService _getStockModelView;
@@ -27,7 +27,7 @@ namespace StocksApp.Controllers
 		public async Task<IActionResult> GetStockDetails(string? symbol)
 		{
 			ViewBag.Token = _configuration["finnhubapikey"];
-			StockDetailsViewModel stockDetailsViewModel = await _getStockModelView.GetStockDetailsViewModel(symbol);
+			StockDetailsViewModel? stockDetailsViewModel = await _getStockModelView.GetStockDetailsViewModel(symbol);
 			return View(stockDetailsViewModel);
 		}
 		
