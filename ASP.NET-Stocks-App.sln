@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Interfaces", "Interfaces\Interfaces.csproj", "{E2C90B26-FAF5-4E97-8B71-E7F14A181A1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Interfaces\Domain.csproj", "{E2C90B26-FAF5-4E97-8B71-E7F14A181A1F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Services", "Services\Services.csproj", "{7071A2A6-152C-4294-880C-EE3782EB3DA1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Services\Application.csproj", "{7071A2A6-152C-4294-880C-EE3782EB3DA1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StocksApp", "StocksApp\StocksApp.csproj", "{E272B562-1E8D-430C-B441-49FC0C0DFE31}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{83393288-F608-4870-BA38-BA6CF5352675}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Models\Infrastructure.csproj", "{83393288-F608-4870-BA38-BA6CF5352675}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -554,10 +554,6 @@ video {
   --tw-contain-style:  ;
 }
 
-.m-auto {
-  margin: auto;
-}
-
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -572,10 +568,6 @@ video {
 
 .max-w-sm {
   max-width: 24rem;
-}
-
-.content-center {
-  align-content: center;
 }
 
 .rounded-lg {
@@ -594,11 +586,6 @@ video {
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
-}
-
-.object-center {
-  -o-object-position: center;
-     object-position: center;
 }
 
 .p-6 {
