@@ -1,6 +1,6 @@
-using Interfaces;
-using Services;
-using Models;
+using Domain.Entities;
+using Application.Services;
+using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();

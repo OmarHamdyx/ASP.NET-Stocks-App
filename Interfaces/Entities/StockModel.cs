@@ -1,4 +1,4 @@
-﻿namespace Models
+﻿namespace Domain.Entities
 {
 	public class StockModel
 	{

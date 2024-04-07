@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Interfaces;
-using Models;
+using Domain.ViewModels;
+using Application.Interfaces;
 namespace StocksApp.Controllers
 {
 
-	public class StocksAppController : Controller
+    public class StocksAppController : Controller
 	{
 		private readonly IGetStockModelViewService _getStockModelView;
 		private readonly IConfiguration _configuration;
@@ -13,6 +13,12 @@ namespace StocksApp.Controllers
 		{
 			_getStockModelView = getStockModelView;
 			_configuration = configuration;
+		}
+
+		[Route("/")]
+		public IActionResult Redirect()
+		{
+			return Redirect("/stocksapp");
 		}
 
 		[Route("[action]")]
@@ -24,11 +30,7 @@ namespace StocksApp.Controllers
 			StockDetailsViewModel stockDetailsViewModel = await _getStockModelView.GetStockDetailsViewModel(symbol);
 			return View(stockDetailsViewModel);
 		}
-		[Route("/")]
-		public IActionResult Redirect()
-		{
-			return Redirect("/stocksapp");
-		}
+		
 
 	}
 }
