@@ -11,5 +11,6 @@ builder.Services.AddScoped<IGetStockModelViewService, GetStockModelViewService>(
 
 var app = builder.Build();
 app.UseRouting();
+app.UseStaticFiles();
 app.MapControllers();
 app.Run();

@@ -3,27 +3,32 @@ using Interfaces;
 using Models;
 namespace StocksApp.Controllers
 {
-    [Route("[controller]")]
-    public class StocksAppController : Controller
-    {
-        private readonly IGetStockModelViewService _getStockModelView;
-        private readonly IConfiguration _configuration;
 
-        public StocksAppController(IGetStockModelViewService getStockModelView, IConfiguration configuration)
-        {
-            _getStockModelView = getStockModelView;
-            _configuration = configuration;
-        }
+	public class StocksAppController : Controller
+	{
+		private readonly IGetStockModelViewService _getStockModelView;
+		private readonly IConfiguration _configuration;
 
-        [Route("[action]")]
-        [Route("/[controller]")]
-        [Route("/[controller]/{symbol}")]
-        public async Task<IActionResult> GetStockDetails(string? symbol)
-        {
-            ViewBag.Token = _configuration["finnhubapikey"];
-            StockDetailsViewModel stockDetailsViewModel = await _getStockModelView.GetStockDetailsViewModel(symbol);
+		public StocksAppController(IGetStockModelViewService getStockModelView, IConfiguration configuration)
+		{
+			_getStockModelView = getStockModelView;
+			_configuration = configuration;
+		}
 
-            return View(stockDetailsViewModel);
-        }
-    }
+		[Route("[action]")]
+		[Route("/[controller]")]
+		[Route("/[controller]/{symbol}")]
+		public async Task<IActionResult> GetStockDetails(string? symbol)
+		{
+			ViewBag.Token = _configuration["finnhubapikey"];
+			StockDetailsViewModel stockDetailsViewModel = await _getStockModelView.GetStockDetailsViewModel(symbol);
+			return View(stockDetailsViewModel);
+		}
+		[Route("/")]
+		public IActionResult Redirect()
+		{
+			return Redirect("/stocksapp");
+		}
+
+	}
 }
