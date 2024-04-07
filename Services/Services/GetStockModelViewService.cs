@@ -14,11 +14,15 @@ namespace Application.Services
 
         }
 
-        public async Task<StockDetailsViewModel> GetStockDetailsViewModel(string? symbol)
+        public async Task<StockDetailsViewModel?> GetStockDetailsViewModel(string? symbol)
         {
 
             StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
             CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
+            if(stockModel is null ||companyInfo is null)
+            {
+                return null;
+            }
             StockDetailsViewModel? stockDetailsViewModel = new StockDetailsViewModel();
             stockDetailsViewModel.StockName = companyInfo.Name;
             stockDetailsViewModel.StockSymbol = companyInfo.Ticker;

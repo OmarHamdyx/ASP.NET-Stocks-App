@@ -4,6 +4,6 @@ namespace Application.Interfaces
 {
     public interface IGetStockModelViewService
     {
-        public Task<StockDetailsViewModel> GetStockDetailsViewModel(string? symbol);
+        public Task<StockDetailsViewModel?> GetStockDetailsViewModel(string? symbol);
     }
 }
