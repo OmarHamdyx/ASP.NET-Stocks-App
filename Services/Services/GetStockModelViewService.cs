@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
 using Domain.Entities;
-using Domain.ViewModels;
+using Application.ViewModels;
 
 namespace Application.Services
 {

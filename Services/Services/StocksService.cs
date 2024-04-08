@@ -8,11 +8,11 @@ namespace Application.Services
 	public class StocksService : IStocksService
 	{
 		private readonly List<BuyOrder> _buyOrders;
-		private readonly List<SellOrder> _sellOrder;
+		private readonly List<SellOrder> _sellOrders;
 		public StocksService() 
 		{
 			_buyOrders = new List<BuyOrder>();
-			_sellOrder = new List<SellOrder>();		
+			_sellOrders = new List<SellOrder>();		
 		}
 		public async Task<BuyOrderResponse?> CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
 		{
@@ -20,24 +20,50 @@ namespace Application.Services
 			{
 				throw new ArgumentNullException(nameof(buyOrderRequest));	
 			}
-			BuyOrder buyOrder = buyOrderRequest.ToBuyOrder();
-			buyOrder.BuyOrderId=Guid.NewGuid();
-			_buyOrders.Add(buyOrder);
-			return  buyOrder.ToBuyOrderResponse();
+			if (buyOrderRequest.Quantity == 0 || 
+				buyOrderRequest.Quantity > 100000 ||
+				buyOrderRequest.Price <= 0 ||
+				buyOrderRequest.StockSymbol is null ||
+				buyOrderRequest.DateAndTimeOfOrder < DateTime.Parse("2000-01-01")) 
+			{
+				throw new ArgumentException(nameof(buyOrderRequest));	
+			}
 			
+			BuyOrder buyOrder = buyOrderRequest.ToBuyOrder();
+			_buyOrders.Add(buyOrder);
+			return buyOrder.ToBuyOrderResponse();
 		}
 
-		public Task<SellOrderResponse?> CreateSellOrder(SellOrderRequest? sellOrderRequest)
+		public async Task<SellOrderResponse?> CreateSellOrder(SellOrderRequest? sellOrderRequest)
 		{
-			throw new NotImplementedException();
+			if (sellOrderRequest == null)
+			{
+				throw new ArgumentNullException(nameof(sellOrderRequest));
+			}
+			if (sellOrderRequest.Quantity == 0 ||
+				sellOrderRequest.Quantity > 100000 ||
+				sellOrderRequest.Price <= 0 ||
+				sellOrderRequest.StockSymbol is null ||
+				sellOrderRequest.DateAndTimeOfOrder < DateTime.Parse("2000-01-01"))
+			{
+				throw new ArgumentException(nameof(sellOrderRequest));
+			}
+			SellOrder sellOrder = sellOrderRequest.ToSellOrder();
+			_sellOrders.Add(sellOrder);
+			return sellOrder.ToSellOrderResponse();	
 		}
 
-		public Task<List<BuyOrderResponse?>?> GetBuyOrders()
+		public async  Task<List<BuyOrderResponse?>?> GetBuyOrders()
 		{
-			throw new NotImplementedException();
+			List<BuyOrderResponse?>? buyOrderResponses = new List<BuyOrderResponse?>();
+			foreach (BuyOrder buyOrder in _buyOrders) 
+			{
+				buyOrderResponses.Add(buyOrder.ToBuyOrderResponse());
+			}
+			return buyOrderResponses;
 		}
 
-		public Task<List<SellOrderResponse?>?> GetSellOrders()
+		public async Task<List<SellOrderResponse?>?> GetSellOrders()
 		{
 			throw new NotImplementedException();
 		}

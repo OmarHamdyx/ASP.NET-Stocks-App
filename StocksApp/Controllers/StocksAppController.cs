@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Domain.ViewModels;
+using Application.ViewModels;
 using Application.Interfaces;
 namespace StocksApp.Controllers
 {

@@ -1,4 +1,4 @@
-﻿namespace Domain.ViewModels
+﻿namespace Application.ViewModels
 {
 	public class StockDetailsViewModel
 	{

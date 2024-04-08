@@ -1,5 +1,4 @@
 ﻿using Domain.Entities;
-using System.Runtime.CompilerServices;
 
 namespace Application.DtoModels
 {
@@ -12,19 +11,45 @@ namespace Application.DtoModels
 		public uint? Quantity { get; set; }
 		public double? Price { get; set; }
 		public double? TradeAmount { get; set; }
+		public override bool Equals(object? obj)
+		{
+			if (obj is null)
+			{
+				return false;
+			}
+			if (obj.GetType() == typeof(BuyOrderResponse))
+			{
+				BuyOrderResponse buyOrderResponse = (BuyOrderResponse)obj;
+				return(BuyOrderID==buyOrderResponse.BuyOrderID &&
+					StockSymbol==buyOrderResponse.StockSymbol&&
+					StockName==buyOrderResponse.StockName&&
+					DateAndTimeOfOrder==buyOrderResponse.DateAndTimeOfOrder&&
+					Quantity==buyOrderResponse.Quantity &&
+					Price==buyOrderResponse.Price &&
+					TradeAmount==buyOrderResponse.TradeAmount
+					);
+			}
+			return false;
+		}
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
+		}
 	}
 
 	public static class BuyOrderExtention
 	{
-		public static BuyOrderResponse ToBuyOrderResponse(this BuyOrder buyOrder) 
+		public static BuyOrderResponse ToBuyOrderResponse(this BuyOrder buyOrder)
 		{
 			return new BuyOrderResponse()
 			{
 				BuyOrderID = buyOrder.BuyOrderId,
 				StockSymbol = buyOrder.StockSymbol,
 				StockName = buyOrder.StockName,
+				DateAndTimeOfOrder= buyOrder.DateAndTimeOfOrder,
 				Price = buyOrder.Price,
-				TradeAmount = 0
+				Quantity = buyOrder.Quantity,
+				TradeAmount = buyOrder.Price * buyOrder.Quantity
 			};
 		}
 	}
