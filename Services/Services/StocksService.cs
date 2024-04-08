@@ -65,7 +65,12 @@ namespace Application.Services
 
 		public async Task<List<SellOrderResponse?>?> GetSellOrders()
 		{
-			throw new NotImplementedException();
+			List<SellOrderResponse?>? sellOrderResponses = new List<SellOrderResponse?>();
+			foreach (SellOrder sellOrder in _sellOrders) 
+			{
+				sellOrderResponses.Add(sellOrder.ToSellOrderResponse());
+			}
+			return sellOrderResponses;
 		}
 	}
 }

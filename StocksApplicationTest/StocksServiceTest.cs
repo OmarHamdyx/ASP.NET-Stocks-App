@@ -253,16 +253,84 @@ namespace StocksApplicationTest
 			
 
 			List<BuyOrderResponse?>? buyOrderResponsesFromGetting = await _stocksService.GetBuyOrders();	
+
 			foreach(BuyOrderResponse? buyOrderResponseFromGetting in buyOrderResponsesFromGetting)
 			{
 				Assert.Contains(buyOrderResponseFromGetting, buyOrderResponsesFromAdding);
 			}
 		
 		}
+		[Fact]
+		public async void GetSellOrders_WhenSellOrdersListIsEmpty() 
+		{
+			List<SellOrderResponse?>? sellOrderResponses = await _stocksService.GetSellOrders();
+			Assert.Empty(sellOrderResponses);
+		}
+		[Fact]
+		public async void GetSellOrders_WhenSellOrdersListHasSellOrders() 
+		{
 
+			SellOrderRequest sellOrderRequest1 = new SellOrderRequest()
+			{
+				StockName = "Tesla",
+				StockSymbol = "TSLA",
+				DateAndTimeOfOrder = DateTime.Now,
+				Quantity = 10,
+				Price = 800.00
+			};
 
+			SellOrderRequest sellOrderRequest2 = new SellOrderRequest()
+			{
+				StockName = "Microsoft",
+				StockSymbol = "MSFT",
+				DateAndTimeOfOrder = DateTime.Now,
+				Quantity = 20,
+				Price = 220.50
+			};
 
+			SellOrderRequest sellOrderRequest3 = new SellOrderRequest()
+			{
+				StockName = "Apple",
+				StockSymbol = "AAPL",
+				DateAndTimeOfOrder = DateTime.Now,
+				Quantity = 15,
+				Price = 125.75
+			};
 
+			SellOrderRequest sellOrderRequest4 = new SellOrderRequest()
+			{
+				StockName = "Amazon",
+				StockSymbol = "AMZN",
+				DateAndTimeOfOrder = DateTime.Now,
+				Quantity = 12,
+				Price = 3200.00
+			};
+
+			SellOrderRequest sellOrderRequest5 = new SellOrderRequest()
+			{
+				StockName = "Google",
+				StockSymbol = "GOOGL",
+				DateAndTimeOfOrder = DateTime.Now,
+				Quantity = 8,
+				Price = 2450.50
+			};
+
+			List<SellOrderResponse?> sellOrderResponsesFromAdding = new List<SellOrderResponse?>();
+
+			sellOrderResponsesFromAdding.Add(await _stocksService.CreateSellOrder(sellOrderRequest1));
+			sellOrderResponsesFromAdding.Add(await _stocksService.CreateSellOrder(sellOrderRequest2));
+			sellOrderResponsesFromAdding.Add(await _stocksService.CreateSellOrder(sellOrderRequest3));
+			sellOrderResponsesFromAdding.Add(await _stocksService.CreateSellOrder(sellOrderRequest4));
+			sellOrderResponsesFromAdding.Add(await _stocksService.CreateSellOrder(sellOrderRequest5));
+
+			List<SellOrderResponse?> sellOrderResponsesFromGetting = await _stocksService.GetSellOrders();
+
+			foreach (SellOrderResponse? sellOrderResponseFromGetting in sellOrderResponsesFromGetting)
+			{
+				Assert.Contains(sellOrderResponseFromGetting, sellOrderResponsesFromAdding);
+			}
+
+		}
 
 	}
 }
