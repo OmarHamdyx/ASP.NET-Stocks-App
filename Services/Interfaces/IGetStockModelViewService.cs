@@ -1,4 +1,4 @@
-﻿using Domain.ViewModels;
+﻿using Application.ViewModels;
 
 namespace Application.Interfaces
 {
