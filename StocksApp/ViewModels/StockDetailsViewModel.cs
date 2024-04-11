@@ -1,4 +1,4 @@
-﻿namespace Application.ViewModels
+﻿namespace StocksApp.ViewModels
 {
 	public class StockDetailsViewModel
 	{
