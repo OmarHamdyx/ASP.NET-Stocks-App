@@ -1,23 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Application.ViewModels;
+using StocksApp.ViewModels;
 using Application.Interfaces;
+using Domain.Entities;
 namespace StocksApp.Controllers
 {
 	[Controller]
-    public class StocksAppController : Controller
+	public class StocksAppController : Controller
 	{
-		private readonly IGetStockModelViewService _getStockModelView;
 		private readonly IConfiguration _configuration;
+		private readonly IFinnhubService _finhubbService;
 
-		public StocksAppController(IGetStockModelViewService getStockModelView, IConfiguration configuration)
+		public StocksAppController(IConfiguration configuration, IFinnhubService finhubbService)
 		{
-			_getStockModelView = getStockModelView;
 			_configuration = configuration;
+			_finhubbService = finhubbService;
 		}
 
 		[Route("/")]
 		public IActionResult Redirect()
 		{
+
 			return Redirect("/stocksapp");
 		}
 
@@ -27,10 +29,20 @@ namespace StocksApp.Controllers
 		public async Task<IActionResult> GetStockDetails(string? symbol)
 		{
 			ViewBag.Token = _configuration["finnhubapikey"];
-			StockDetailsViewModel? stockDetailsViewModel = await _getStockModelView.GetStockDetailsViewModel(symbol);
+			StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
+			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
+			if (stockModel is null || companyInfo is null)
+			{
+				return null;
+			}
+			StockDetailsViewModel? stockDetailsViewModel = new StockDetailsViewModel()
+			{
+				StockName = companyInfo.Name,
+				StockSymbol = companyInfo.Ticker,
+				StockPrice = stockModel.C
+			};
 			return View(stockDetailsViewModel);
 		}
-		
-
 	}
 }
+
