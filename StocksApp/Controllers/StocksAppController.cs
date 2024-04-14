@@ -5,8 +5,12 @@ using Domain.Entities;
 namespace StocksApp.Controllers
 {
 	[Controller]
+	//Parent route
+	[Route("[controller]")]
+
 	public class StocksAppController : Controller
 	{
+
 		private readonly IConfiguration _configuration;
 		private readonly IFinnhubService _finhubbService;
 
@@ -15,18 +19,18 @@ namespace StocksApp.Controllers
 			_configuration = configuration;
 			_finhubbService = finhubbService;
 		}
-
+		//Will not follow parent because of '/'
 		[Route("/")]
+		[Route("/Home-page")]
 		public IActionResult Redirect()
 		{
-
 			return Redirect("/stocksapp");
 		}
 
-		[Route("[action]")]
-		[Route("/[controller]")]
-		[Route("/[controller]/{symbol}")]
-		public async Task<IActionResult> GetStockDetails(string? symbol)
+		
+		[Route("")]
+		[Route("Index")]
+		public async Task<IActionResult?> Index(string? symbol)
 		{
 			ViewBag.Token = _configuration["finnhubapikey"];
 			StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
@@ -42,6 +46,11 @@ namespace StocksApp.Controllers
 				StockPrice = stockModel.C
 			};
 			return View(stockDetailsViewModel);
+		}
+		[Route("orders")]
+		public async Task<IActionResult?> Orders(string? symbol)
+		{
+			return View();
 		}
 	}
 }
