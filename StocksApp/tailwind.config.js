@@ -1,8 +1,12 @@
 module.exports = {
     content: [
-        './Views/**/*.{cshtml,razor}'],
+        './Views/**/*.{cshtml,razor}',
+        "./node_modules/flowbite/**/*.js"],
+    darkMode: 'media',
     theme: {
         extend: {},
     },
-    plugins: [],
+    plugins: [
+        require('flowbite/plugin')
+    ],
 }
