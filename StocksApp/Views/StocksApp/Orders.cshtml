@@ -1,4 +1,67 @@
-﻿@{
+﻿@model OrdersViewModel
+
+@{
 	ViewBag.Title = "Orders";
 }
-<div></div>
+<div class=" mt-52">
+	<ul class="font-bold flex text-3xl">
+		<li class="mr-6">
+			<a class="dark:text-white hover:text-blue-800 text-gray-800" href="/stocksapp/Index">Trade</a>
+		</li>
+		<li class="mr-6">
+			<a class="underline-offset-4 dark:text-white underline hover:text-blue-800 text-gray-800" href="/stocksapp/orders">Orders</a>
+		</li>
+	</ul>
+
+	<div class="my-5 text-2xl text-gray-600 dark:text-white">Stocks <span class="text-3xl">▸ </span>Orders</div>
+
+	@if (Model.SellOrders.Count == 0 && Model.BuyOrders.Count == 0)
+	{
+		<div class="text-[3rem] text-white block max-w-fit rounded-lg  p-6 dark:text-gray-800 ">
+			No Orders Yet
+		</div>
+	}
+	else
+	{
+		<div class="flex pb-[10rem]">
+			<div>
+				@if (Model.BuyOrders.Count != 0)
+				{
+					<div class="block  w-[30rem] rounded-lg border border-gray-200 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
+						<p class="font-bold text-gray-500">Buy Orders</p>
+
+						@foreach (BuyOrderResponse? buyOrderResponse in Model.BuyOrders)
+						{
+							@await Html.PartialAsync("_BuyOrderBox", buyOrderResponse)
+
+						}
+					</div>
+				}
+				else
+				{
+					<div class="text-[3rem] text-white block max-w-fit rounded-lg  p-6 dark:text-gray-800 ">
+						No Buy Orders
+					</div>
+				}
+			</div>
+			<div class="ml-10">
+				@if (Model.SellOrders.Count != 0)
+				{
+					<div class="block  w-[30rem] rounded-lg border border-gray-200 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
+						<p class="font-bold text-gray-500">Sell Orders</p>
+						@foreach (SellOrderResponse? sellOrderResponse in Model.SellOrders)
+						{
+							@await Html.PartialAsync("_SellOrderBox", sellOrderResponse)
+						}
+					</div>
+				}
+				else
+				{
+					<div class="text-[3rem] text-white block max-w-fit rounded-lg  p-6 dark:text-gray-800 ">
+						No Sell Orders
+					</div>
+				}
+			</div>
+		</div>
+	}
+</div>

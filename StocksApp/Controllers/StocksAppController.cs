@@ -2,6 +2,7 @@
 using StocksApp.ViewModels;
 using Application.Interfaces;
 using Domain.Entities;
+using Application.DtoModels;
 namespace StocksApp.Controllers
 {
 	[Controller]
@@ -13,25 +14,31 @@ namespace StocksApp.Controllers
 
 		private readonly IConfiguration _configuration;
 		private readonly IFinnhubService _finhubbService;
+		private readonly IStocksService _stocksService;
 
-		public StocksAppController(IConfiguration configuration, IFinnhubService finhubbService)
+
+		public StocksAppController(IConfiguration configuration, IFinnhubService finhubbService, IStocksService stocksService)
 		{
 			_configuration = configuration;
 			_finhubbService = finhubbService;
-		}
-		//Will not follow parent because of '/'
-		[Route("/")]
-		[Route("/Home-page")]
-		public IActionResult Redirect()
-		{
-			return Redirect("/stocksapp");
+			_stocksService = stocksService;
 		}
 
-		
 		[Route("")]
-		[Route("Index")]
-		public async Task<IActionResult?> Index(string? symbol)
+		[Route("/")]
+		[HttpGet("index")]
+		public async Task<IActionResult?> GetStockDetails(string? symbol)
 		{
+
+			if (symbol is not null)
+			{
+				_stocksService.CurrentStockSumbol = symbol;
+			}
+			else if (_stocksService.CurrentStockSumbol is not null)
+			{
+				symbol = _stocksService.CurrentStockSumbol;
+			}
+
 			ViewBag.Token = _configuration["finnhubapikey"];
 			StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
 			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
@@ -45,12 +52,58 @@ namespace StocksApp.Controllers
 				StockSymbol = companyInfo.Ticker,
 				StockPrice = stockModel.C
 			};
-			return View(stockDetailsViewModel);
+			return View("Index", stockDetailsViewModel);
 		}
-		[Route("orders")]
-		public async Task<IActionResult?> Orders(string? symbol)
+
+		[HttpPost("index")]
+		public async Task<IActionResult> PostOrder(OrderRequest? orderRequest, IFormCollection form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
 		{
-			return View();
+			if (form.ContainsKey("buy-order"))
+			{
+				ViewBag.CurrentStockSymbol = orderRequest.StockSymbol;
+
+				BuyOrderRequest buyOrderRequest = new()
+				{
+					StockName = orderRequest.StockName,
+					StockSymbol = orderRequest.StockSymbol,
+					DateAndTimeOfOrder = DateTime.Now,
+					Quantity = orderRequest.Quantity,
+					Price = orderRequest.Price,
+				};
+				await _stocksService.CreateBuyOrder(buyOrderRequest);
+			}
+			else if (form.ContainsKey("sell-order"))
+			{
+				ViewBag.CurrentStockSymbol = orderRequest.StockSymbol;
+
+				SellOrderRequest sellOrderRequest = new()
+				{
+					StockName = orderRequest.StockName,
+					StockSymbol = orderRequest.StockSymbol,
+					DateAndTimeOfOrder = DateTime.Now,
+					Quantity = orderRequest.Quantity,
+					Price = orderRequest.Price,
+				};
+
+				await _stocksService.CreateSellOrder(sellOrderRequest);
+
+			}
+			return RedirectToAction("GetStockDetails", new { symbol = orderRequest.StockSymbol });
+		}
+
+		[HttpGet("orders")]
+		public async Task<IActionResult?> GetOrders()
+		{
+
+			OrdersViewModel ordersViewModel = new OrdersViewModel()
+			{
+				BuyOrders = await _stocksService.GetBuyOrders(),
+
+				SellOrders = await _stocksService.GetSellOrders()
+
+			};
+
+			return View("Orders",ordersViewModel);
 		}
 	}
 }

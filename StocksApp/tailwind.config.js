@@ -2,11 +2,11 @@ module.exports = {
     content: [
         './Views/**/*.{cshtml,razor}',
         "./node_modules/flowbite/**/*.js"],
-    darkMode: 'media',
+    darkMode: 'class',
     theme: {
         extend: {},
     },
     plugins: [
-        require('flowbite/plugin')
+        require('tailwindcss-animated')
     ],
 }

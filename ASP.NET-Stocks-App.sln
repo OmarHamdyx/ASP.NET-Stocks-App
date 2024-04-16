@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StocksApp", "StocksApp\Stoc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Models\Infrastructure.csproj", "{83393288-F608-4870-BA38-BA6CF5352675}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StocksApplicationTest", "StocksApplicationTest\StocksApplicationTest.csproj", "{A1FF0B45-5E44-4D89-B98B-7AA98447F350}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StocksApplicationTest", "StocksApplicationTest\StocksApplicationTest.csproj", "{A1FF0B45-5E44-4D89-B98B-7AA98447F350}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
