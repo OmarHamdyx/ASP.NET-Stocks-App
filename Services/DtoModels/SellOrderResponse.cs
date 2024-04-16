@@ -18,7 +18,7 @@ namespace Application.DtoModels
 			{
 				return false;
 			}
-			if (obj.GetType() == typeof(SellOrderResponse))
+			if (obj is SellOrderResponse)
 			{
 				SellOrderResponse sellOrderResponse = (SellOrderResponse)obj;
 				

@@ -9,5 +9,4 @@
 		public double StockPrice { get; set; }
 
 	}
-
 }

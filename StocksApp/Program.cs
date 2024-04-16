@@ -6,7 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
 builder.Services.Configure<DefaultSymbolOption>(builder.Configuration.GetSection("DefaultSymbol"));
 builder.Services.AddControllersWithViews();
-builder.Services.AddSingleton<IFinnhubService, FinnhubService>();
+builder.Services.AddScoped<IFinnhubService, FinnhubService>();
+builder.Services.AddSingleton<IStocksService, StocksService>();
 
 var app = builder.Build();
 app.UseRouting();

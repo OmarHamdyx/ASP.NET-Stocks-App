@@ -13,5 +13,7 @@ namespace Application.Interfaces
 		public Task<SellOrderResponse?> CreateSellOrder(SellOrderRequest? sellOrderRequest);
 		public Task<List<BuyOrderResponse?>?> GetBuyOrders();
 		public Task<List<SellOrderResponse?>?> GetSellOrders();
+
+		public string? CurrentStockSumbol { get; set; }
 	}
 }

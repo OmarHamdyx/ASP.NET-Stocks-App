@@ -1,13 +1,16 @@
 ﻿using Application.ValidatorAttributes;
-using Domain.Entities;
-using Microsoft.VisualBasic;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.DtoModels
 {
-	public class BuyOrderRequest
+	public class OrderRequest
 	{
-		
+	
 
 		[Required(ErrorMessage = "StockSymbol is required")]
 		public string? StockSymbol { get; set; }
@@ -25,17 +28,5 @@ namespace Application.DtoModels
 		[Range(1.0, 10000.0, ErrorMessage = "Price must be between 1 and 10000")]
 		public double? Price { get; set; }
 
-		public BuyOrder ToBuyOrder() 
-		{
-			return new BuyOrder()
-			{
-				BuyOrderId=Guid.NewGuid(),
-				StockSymbol = StockSymbol,
-				StockName = StockName,
-				DateAndTimeOfOrder = DateAndTimeOfOrder,
-				Quantity = Quantity,
-				Price = Price,
-			};
-		}
 	}
 }

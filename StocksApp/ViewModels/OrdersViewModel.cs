@@ -1,9 +1,9 @@
 ﻿using Application.DtoModels;
 
 
-namespace Application.ViewModels
+namespace StocksApp.ViewModels
 {
-	public class Trade
+	public class OrdersViewModel
 	{
 		public List<BuyOrderResponse?>? BuyOrders { get; set; }
 		public List<SellOrderResponse?>? SellOrders { get; set; }

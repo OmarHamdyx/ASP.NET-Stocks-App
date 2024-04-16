@@ -9,6 +9,8 @@ namespace Application.Services
 	{
 		private readonly List<BuyOrder> _buyOrders;
 		private readonly List<SellOrder> _sellOrders;
+
+		public string? CurrentStockSumbol { get; set; }
 		public StocksService() 
 		{
 			_buyOrders = new List<BuyOrder>();
@@ -16,10 +18,8 @@ namespace Application.Services
 		}
 		public async Task<BuyOrderResponse?> CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
 		{
-			if (buyOrderRequest == null) 
-			{
-				throw new ArgumentNullException(nameof(buyOrderRequest));	
-			}
+			ArgumentNullException.ThrowIfNull(buyOrderRequest);
+
 			if (buyOrderRequest.Quantity == 0 || 
 				buyOrderRequest.Quantity > 100000 ||
 				buyOrderRequest.Price <= 0 ||
@@ -36,10 +36,8 @@ namespace Application.Services
 
 		public async Task<SellOrderResponse?> CreateSellOrder(SellOrderRequest? sellOrderRequest)
 		{
-			if (sellOrderRequest == null)
-			{
-				throw new ArgumentNullException(nameof(sellOrderRequest));
-			}
+			ArgumentNullException.ThrowIfNull(sellOrderRequest);
+
 			if (sellOrderRequest.Quantity == 0 ||
 				sellOrderRequest.Quantity > 100000 ||
 				sellOrderRequest.Price <= 0 ||
@@ -50,6 +48,7 @@ namespace Application.Services
 			}
 			SellOrder sellOrder = sellOrderRequest.ToSellOrder();
 			_sellOrders.Add(sellOrder);
+
 			return sellOrder.ToSellOrderResponse();	
 		}
 
