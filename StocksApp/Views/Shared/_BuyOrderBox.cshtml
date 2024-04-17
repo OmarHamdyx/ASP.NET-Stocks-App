@@ -1,7 +1,7 @@
 ﻿@model BuyOrderResponse
 
 <div class="font-bold text-gray-800 dark:text-white">
-	<div class=" text-[30px] ">@Model.StockName (@Model.StockSymbol)</div>
+	<div class="text-[30px]">@Model.StockName (@Model.StockSymbol)</div>
 	<div>@Model.Quantity shares at @Model.Price.Value.ToString("0.00")</div>
 	<div>Trade Amount : @Model.TradeAmount.Value.ToString("0.00")</div>
 </div>

@@ -3,13 +3,13 @@
 @{
 	ViewBag.Title = "Orders";
 }
-<div class=" mt-52">
-	<ul class="font-bold flex text-3xl">
+<div class="mt-52">
+	<ul class="flex text-3xl font-bold">
 		<li class="mr-6">
-			<a class="dark:text-white hover:text-blue-800 text-gray-800" href="/stocksapp/Index">Trade</a>
+			<a class="text-gray-800 hover:text-blue-800 dark:text-white" href="/stocksapp/Index">Trade</a>
 		</li>
 		<li class="mr-6">
-			<a class="underline-offset-4 dark:text-white underline hover:text-blue-800 text-gray-800" href="/stocksapp/orders">Orders</a>
+			<a class="underline-offset-4 text-gray-800 underline hover:text-blue-800 dark:text-white" href="/stocksapp/orders">Orders</a>
 		</li>
 	</ul>
 
@@ -17,17 +17,17 @@
 
 	@if (Model.SellOrders.Count == 0 && Model.BuyOrders.Count == 0)
 	{
-		<div class="text-[3rem] text-white block max-w-fit rounded-lg  p-6 dark:text-gray-800 ">
+		<div class="text-[3rem] block max-w-fit rounded-lg p-6 text-gray-800 dark:text-white">
 			No Orders Yet
 		</div>
 	}
 	else
 	{
-		<div class="flex pb-[10rem]">
+		<div class="pb-[10rem] flex">
 			<div>
 				@if (Model.BuyOrders.Count != 0)
 				{
-					<div class="block  w-[30rem] rounded-lg border border-gray-200 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
+					<div class="w-[30rem] block rounded-lg border border-gray-500 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
 						<p class="font-bold text-gray-500">Buy Orders</p>
 
 						@foreach (BuyOrderResponse? buyOrderResponse in Model.BuyOrders)
@@ -39,7 +39,7 @@
 				}
 				else
 				{
-					<div class="text-[3rem] text-white block max-w-fit rounded-lg  p-6 dark:text-gray-800 ">
+					<div class="text-[3rem] block max-w-fit rounded-lg p-6 text-gray-800 dark:text-white">
 						No Buy Orders
 					</div>
 				}
@@ -47,7 +47,7 @@
 			<div class="ml-10">
 				@if (Model.SellOrders.Count != 0)
 				{
-					<div class="block  w-[30rem] rounded-lg border border-gray-200 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
+					<div class="w-[30rem] block rounded-lg border border-gray-200 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
 						<p class="font-bold text-gray-500">Sell Orders</p>
 						@foreach (SellOrderResponse? sellOrderResponse in Model.SellOrders)
 						{
@@ -57,7 +57,7 @@
 				}
 				else
 				{
-					<div class="text-[3rem] text-white block max-w-fit rounded-lg  p-6 dark:text-gray-800 ">
+					<div class="text-[3rem] block max-w-fit rounded-lg p-6 text-gray-800 dark:text-white">
 						No Sell Orders
 					</div>
 				}
