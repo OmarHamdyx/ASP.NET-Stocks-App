@@ -3,6 +3,7 @@ using StocksApp.ViewModels;
 using Application.Interfaces;
 using Domain.Entities;
 using Application.DtoModels;
+using System.Globalization;
 namespace StocksApp.Controllers
 {
 	[Controller]
@@ -27,8 +28,9 @@ namespace StocksApp.Controllers
 		[Route("")]
 		[Route("/")]
 		[HttpGet("index")]
-		public async Task<IActionResult?> GetStockDetails(string? symbol)
+		public async Task<IActionResult?> GetStockDetails(string? symbol , List<string?>? errors)
 		{
+			ViewBag.ErrorMessages = errors;
 
 			if (symbol is not null)
 			{
@@ -40,6 +42,7 @@ namespace StocksApp.Controllers
 			}
 
 			ViewBag.Token = _configuration["finnhubapikey"];
+
 			StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
 			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
 			if (stockModel is null || companyInfo is null)
@@ -58,34 +61,50 @@ namespace StocksApp.Controllers
 		[HttpPost("index")]
 		public async Task<IActionResult> PostOrder(OrderRequest? orderRequest, IFormCollection form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
 		{
+			
 			if (form.ContainsKey("buy-order"))
 			{
-				ViewBag.CurrentStockSymbol = orderRequest.StockSymbol;
-
-				BuyOrderRequest buyOrderRequest = new()
+				if (!ModelState.IsValid)
 				{
-					StockName = orderRequest.StockName,
-					StockSymbol = orderRequest.StockSymbol,
-					DateAndTimeOfOrder = DateTime.Now,
-					Quantity = orderRequest.Quantity,
-					Price = orderRequest.Price,
-				};
-				await _stocksService.CreateBuyOrder(buyOrderRequest);
+					List<string> errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+
+					return RedirectToAction("GetStockDetails", new{Errors=errors });
+				}
+				else
+				{
+					BuyOrderRequest buyOrderRequest = new()
+					{
+						StockName = orderRequest.StockName,
+						StockSymbol = orderRequest.StockSymbol,
+						DateAndTimeOfOrder = DateTime.Now,
+						Quantity = orderRequest.Quantity,
+						Price = orderRequest.Price,
+					};
+					await _stocksService.CreateBuyOrder(buyOrderRequest);
+				}
+
 			}
 			else if (form.ContainsKey("sell-order"))
 			{
-				ViewBag.CurrentStockSymbol = orderRequest.StockSymbol;
 
-				SellOrderRequest sellOrderRequest = new()
+				if (!ModelState.IsValid)
 				{
-					StockName = orderRequest.StockName,
-					StockSymbol = orderRequest.StockSymbol,
-					DateAndTimeOfOrder = DateTime.Now,
-					Quantity = orderRequest.Quantity,
-					Price = orderRequest.Price,
-				};
+					List<string> errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+					return RedirectToAction("GetStockDetails", new { Errors = errors });
+				}
+				else
+				{
+					SellOrderRequest sellOrderRequest = new()
+					{
+						StockName = orderRequest.StockName,
+						StockSymbol = orderRequest.StockSymbol,
+						DateAndTimeOfOrder = DateTime.Now,
+						Quantity = orderRequest.Quantity,
+						Price = orderRequest.Price,
+					};
 
-				await _stocksService.CreateSellOrder(sellOrderRequest);
+					await _stocksService.CreateSellOrder(sellOrderRequest);
+				}
 
 			}
 			return RedirectToAction("GetStockDetails", new { symbol = orderRequest.StockSymbol });
@@ -103,7 +122,7 @@ namespace StocksApp.Controllers
 
 			};
 
-			return View("Orders",ordersViewModel);
+			return View("Orders", ordersViewModel);
 		}
 	}
 }

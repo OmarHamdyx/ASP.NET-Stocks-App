@@ -2,22 +2,23 @@
 
 @{
 	ViewBag.Title = "Home Page";
-	ViewBag.CurrentlySelected="Trade";
+	ViewBag.CurrentlySelected = "Trade";
 }
 
-<div class="font-bold mt-52">
+
+<div class="mt-52 font-bold">
 	<ul class="flex text-3xl">
 		<li class="mr-6">
-			<a class="underline-offset-4 dark:text-white underline hover:text-blue-800 text-gray-800" href="/stocksapp/Index">Trade</a>
+			<a class="underline-offset-4 text-gray-800 underline hover:text-blue-800 dark:text-white" href="/stocksapp/Index">Trade</a>
 		</li>
 		<li class="mr-6">
-			<a class="dark:text-white hover:text-blue-800 text-gray-800" href="/stocksapp/orders">Orders</a>
+			<a class="text-gray-800 hover:text-blue-800 dark:text-white" href="/stocksapp/orders">Orders</a>
 		</li>
 	</ul>
 </div>
 <div class=" my-5 text-2xl text-gray-600 dark:text-white">Stocks <span class="text-3xl">▸</span> @Model.StockName</div>
 <div class="animate-fade-left mt-5">
-	<div class="block max-w-fit rounded-lg border border-gray-200 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
+	<div class="block max-w-fit rounded-lg border border-gray-500 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
 		<div class="flex">
 			<div>
 				<h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">@Model.StockName (@Model.StockSymbol)</h5>
@@ -40,12 +41,19 @@
 		</div>
 	</div>
 </div>
+@if (ViewBag.ErrorMessages != null)
+{
+	foreach (string error in ViewBag.ErrorMessages)
+	{
+		<div class="text-red-500 dark:text-red-500">@error</div>
+	}
+}
 
 
 
 <input type="hidden" id="StockSymbol" value="@Model.StockSymbol" />
-<input type="hidden" id="FinnhubToken" value="@ViewBag.Token" /> 
+<input type="hidden" id="FinnhubToken" value="@ViewBag.Token" />
 
- @section Scripts {
+@section Scripts {
 	<script src="/Scripts/GetStockDetailsScript.js"></script>
 }
