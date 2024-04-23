@@ -27,7 +27,7 @@ namespace StocksApp.Controllers
 
 		[Route("")]
 		[Route("/")]
-		[HttpGet("index")]
+		[HttpGet("stock-details")]
 		public async Task<IActionResult?> GetStockDetails(string? symbol , List<string?>? errors)
 		{
 			ViewBag.ErrorMessages = errors;
@@ -55,11 +55,11 @@ namespace StocksApp.Controllers
 				StockSymbol = companyInfo.Ticker,
 				StockPrice = stockModel.C
 			};
-			return View("Index", stockDetailsViewModel);
+			return View("StockDetails",stockDetailsViewModel);
 		}
 
-		[HttpPost("index")]
-		public async Task<IActionResult> PostOrder(OrderRequest? orderRequest, IFormCollection form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
+		[HttpPost("stock-details")]
+		public async Task<IActionResult> PostOrder(OrderRequest? orderRequest, IFormCollection? form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
 		{
 			
 			if (form.ContainsKey("buy-order"))
@@ -77,7 +77,7 @@ namespace StocksApp.Controllers
 						StockName = orderRequest.StockName,
 						StockSymbol = orderRequest.StockSymbol,
 						DateAndTimeOfOrder = DateTime.Now,
-						Quantity = orderRequest.Quantity,
+						Quantity = (uint)orderRequest.Quantity,
 						Price = orderRequest.Price,
 					};
 					await _stocksService.CreateBuyOrder(buyOrderRequest);
@@ -99,7 +99,7 @@ namespace StocksApp.Controllers
 						StockName = orderRequest.StockName,
 						StockSymbol = orderRequest.StockSymbol,
 						DateAndTimeOfOrder = DateTime.Now,
-						Quantity = orderRequest.Quantity,
+						Quantity = (uint)orderRequest.Quantity,
 						Price = orderRequest.Price,
 					};
 

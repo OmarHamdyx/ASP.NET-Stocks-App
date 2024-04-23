@@ -1,4 +1,4 @@
-﻿@model OrdersViewModel
+﻿@model OrdersViewModel?
 
 @{
 	ViewBag.Title = "Orders";
@@ -6,7 +6,7 @@
 <div class="mt-52">
 	<ul class="flex text-3xl font-bold">
 		<li class="mr-6">
-			<a class="text-gray-800 hover:text-blue-800 dark:text-white" href="/stocksapp/Index">Trade</a>
+			<a class="text-gray-800 hover:text-blue-800 dark:text-white" href="/stocksapp/stock-details">Trade</a>
 		</li>
 		<li class="mr-6">
 			<a class="underline-offset-4 text-gray-800 underline hover:text-blue-800 dark:text-white" href="/stocksapp/orders">Orders</a>
@@ -44,6 +44,7 @@
 					</div>
 				}
 			</div>
+			
 			<div class="ml-10">
 				@if (Model.SellOrders.Count != 0)
 				{
