@@ -27,10 +27,12 @@ namespace StocksApp.Controllers
 
 		[Route("")]
 		[Route("/")]
+		[HttpGet("[action]")]
 		[HttpGet("stock-details")]
-		public async Task<IActionResult?> GetStockDetails(string? symbol , List<string?>? errors)
+		public async Task<IActionResult?> GetStockDetails(string? symbol, int? quantity , List<string?>? errors)
 		{
 			ViewBag.ErrorMessages = errors;
+			
 
 			if (symbol is not null)
 			{
@@ -51,18 +53,21 @@ namespace StocksApp.Controllers
 			}
 			StockDetailsViewModel? stockDetailsViewModel = new StockDetailsViewModel()
 			{
+				Quantity = quantity,
 				StockName = companyInfo.Name,
 				StockSymbol = companyInfo.Ticker,
-				StockPrice = stockModel.C
+				Price = stockModel.C
+				
 			};
 			return View("StockDetails",stockDetailsViewModel);
 		}
 
+		[HttpPost("[action]")]
 		[HttpPost("stock-details")]
 		public async Task<IActionResult> PostOrder(OrderRequest? orderRequest, IFormCollection? form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
 		{
 			
-			if (form.ContainsKey("buy-order"))
+			if (form.ContainsKey("BuyOrder"))
 			{
 				if (!ModelState.IsValid)
 				{
@@ -84,7 +89,7 @@ namespace StocksApp.Controllers
 				}
 
 			}
-			else if (form.ContainsKey("sell-order"))
+			else if (form.ContainsKey("SellOrder"))
 			{
 
 				if (!ModelState.IsValid)
@@ -107,9 +112,10 @@ namespace StocksApp.Controllers
 				}
 
 			}
-			return RedirectToAction("GetStockDetails", new { symbol = orderRequest.StockSymbol });
+			return RedirectToAction("GetStockDetails", new { Symbol = orderRequest.StockSymbol,Quantity = orderRequest.Quantity });
 		}
 
+		[HttpGet("[action]")]
 		[HttpGet("orders")]
 		public async Task<IActionResult?> GetOrders()
 		{
@@ -119,7 +125,6 @@ namespace StocksApp.Controllers
 				BuyOrders = await _stocksService.GetBuyOrders(),
 
 				SellOrders = await _stocksService.GetSellOrders()
-
 			};
 
 			return View("Orders", ordersViewModel);
