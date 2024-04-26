@@ -7,7 +7,7 @@ namespace StocksApplicationTest
 	{
 		private readonly IStocksService _stocksService;
 
-		public StocksServiceTest() 
+		public StocksServiceTest()
 		{
 			_stocksService = new StocksService();
 		}
@@ -16,8 +16,8 @@ namespace StocksApplicationTest
 		public async void CreateBuyOrder_WhenBuyOrderRequestIsNull()
 		{
 			BuyOrderRequest? buyOrderRequest = null;
-			
-			 await Assert.ThrowsAsync<ArgumentNullException>(async () => { await  _stocksService.CreateBuyOrder(buyOrderRequest); });
+
+			await Assert.ThrowsAsync<ArgumentNullException>(async () => { await _stocksService.CreateBuyOrder(buyOrderRequest); });
 		}
 
 		[Fact]
@@ -27,8 +27,8 @@ namespace StocksApplicationTest
 			{
 				Quantity = 0
 			};
-			
-			 await Assert.ThrowsAsync<ArgumentException>(async () => { await  _stocksService.CreateBuyOrder(buyOrderRequest); });
+
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateBuyOrder(buyOrderRequest); });
 		}
 
 		[Fact]
@@ -38,8 +38,8 @@ namespace StocksApplicationTest
 			{
 				Quantity = 100001
 			};
-			
-			 await Assert.ThrowsAsync<ArgumentException>(async () => { await  _stocksService.CreateBuyOrder(buyOrderRequest); });
+
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateBuyOrder(buyOrderRequest); });
 		}
 		[Fact]
 		public async void CreateBuyOrder_WhenPriceInBuyOrderRequestIsZero()
@@ -48,8 +48,8 @@ namespace StocksApplicationTest
 			{
 				Price = 0
 			};
-			
-			 await Assert.ThrowsAsync<ArgumentException>(async () => { await  _stocksService.CreateBuyOrder(buyOrderRequest); });
+
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateBuyOrder(buyOrderRequest); });
 		}
 		[Fact]
 		public async void CreateBuyOrder_WhenPriceInBuyOrderRequestGreaterThan10000()
@@ -68,10 +68,10 @@ namespace StocksApplicationTest
 			{
 				StockSymbol = null
 			};
-			
-			 await Assert.ThrowsAsync<ArgumentException>(async () => { await  _stocksService.CreateBuyOrder(buyOrderRequest); });
+
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateBuyOrder(buyOrderRequest); });
 		}
-		
+
 		[Fact]
 		public async void CreateBuyOrder_WhenDateAndTimeOfOrderInBuyOrderRequestIsOlderThanMinDate()
 		{
@@ -79,126 +79,126 @@ namespace StocksApplicationTest
 			{
 				DateAndTimeOfOrder = DateTime.Parse("1999-12-31")
 			};
-			
-			 await Assert.ThrowsAsync<ArgumentException>(async () => { await  _stocksService.CreateBuyOrder(buyOrderRequest); });
+
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateBuyOrder(buyOrderRequest); });
 		}
 
 		[Fact]
-		public async void CreateBuyOrder_GetBuyOrders_WhenAllValuesAreValid() 
+		public async void CreateBuyOrder_GetBuyOrders_WhenAllValuesAreValid()
 		{
-			
+
 			BuyOrderRequest buyOrderRequest = new BuyOrderRequest()
 			{
-				StockName="Microsoft",
-				StockSymbol="MSFT",
-				DateAndTimeOfOrder=DateTime.Now,
-				Quantity=15,
-				Price=12.43
+				StockName = "Microsoft",
+				StockSymbol = "MSFT",
+				DateAndTimeOfOrder = DateTime.Now,
+				Quantity = 15,
+				Price = 12.43
 			};
 
-			BuyOrderResponse? buyOrderResponse =await _stocksService.CreateBuyOrder(buyOrderRequest);
+			BuyOrderResponse? buyOrderResponse = await _stocksService.CreateBuyOrder(buyOrderRequest);
 			List<BuyOrderResponse?>? buyOrderResponses = await _stocksService.GetBuyOrders();
 
-			Assert.True(buyOrderResponse.BuyOrderID!=Guid.Empty);
+			Assert.True(buyOrderResponse.BuyOrderID != Guid.Empty);
 			Assert.Contains(buyOrderResponse, buyOrderResponses);
 		}
 		[Fact]
-		public async void CreateSellOrder_WhenSellOrderRequestIsNull() 
+		public async void CreateSellOrder_WhenSellOrderRequestIsNull()
 		{
 			SellOrderRequest? sellOrderRequest = null;
 
-			await Assert.ThrowsAsync<ArgumentNullException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest);});
+			await Assert.ThrowsAsync<ArgumentNullException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest); });
 		}
 
 		[Fact]
-		public async void CreateSellOrder_WhenQuantityInSellOrderRequestIsZero() 
+		public async void CreateSellOrder_WhenQuantityInSellOrderRequestIsZero()
 		{
-			SellOrderRequest? sellOrderRequest = new SellOrderRequest() 
+			SellOrderRequest? sellOrderRequest = new SellOrderRequest()
 			{
-				Quantity=0
+				Quantity = 0
 			};
 
-			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest);});
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest); });
 		}
 		[Fact]
-		public async void CreateSellOrder_WhenQuantityInSellOrderRequestIsGreaterThan100001() 
+		public async void CreateSellOrder_WhenQuantityInSellOrderRequestIsGreaterThan100001()
 		{
-			SellOrderRequest? sellOrderRequest = new SellOrderRequest() 
+			SellOrderRequest? sellOrderRequest = new SellOrderRequest()
 			{
-				Quantity=100001
+				Quantity = 100001
 			};
 
-			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest);});
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest); });
 		}
 		[Fact]
-		public async void CreateSellOrder_WhenPriceInSellOrderRequestIsZero() 
+		public async void CreateSellOrder_WhenPriceInSellOrderRequestIsZero()
 		{
-			SellOrderRequest? sellOrderRequest = new SellOrderRequest() 
+			SellOrderRequest? sellOrderRequest = new SellOrderRequest()
 			{
-				Price=0
+				Price = 0
 			};
 
-			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest);});
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest); });
 		}
 		[Fact]
-		public async void CreateSellOrder_WhenPriceInSellOrderRequestIsGreaterThan10001() 
+		public async void CreateSellOrder_WhenPriceInSellOrderRequestIsGreaterThan10001()
 		{
-			SellOrderRequest? sellOrderRequest = new SellOrderRequest() 
+			SellOrderRequest? sellOrderRequest = new SellOrderRequest()
 			{
-				Price=10001
+				Price = 10001
 			};
 
-			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest);});
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest); });
 		}
 		[Fact]
-		public async void CreateSellOrder_WhenStockSymbolInSellOrderRequestIsNull() 
+		public async void CreateSellOrder_WhenStockSymbolInSellOrderRequestIsNull()
 		{
-			SellOrderRequest? sellOrderRequest = new SellOrderRequest() 
+			SellOrderRequest? sellOrderRequest = new SellOrderRequest()
 			{
-				StockSymbol=null
+				StockSymbol = null
 			};
 
-			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest);});
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest); });
 		}
 		[Fact]
-		public async void CreateSellOrder_WhenDateAndTimeOfOrderInSellOrderRequestIsOlderThanMinDate() 
+		public async void CreateSellOrder_WhenDateAndTimeOfOrderInSellOrderRequestIsOlderThanMinDate()
 		{
-			SellOrderRequest? sellOrderRequest = new SellOrderRequest() 
+			SellOrderRequest? sellOrderRequest = new SellOrderRequest()
 			{
-				DateAndTimeOfOrder=DateTime.Parse("1999-12-31")
+				DateAndTimeOfOrder = DateTime.Parse("1999-12-31")
 			};
 
-			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest);});
+			await Assert.ThrowsAsync<ArgumentException>(async () => { await _stocksService.CreateSellOrder(sellOrderRequest); });
 		}
 		[Fact]
-		public async void CreateSellOrder_GetSellOrders_WhenAllValuesAreValid() 
+		public async void CreateSellOrder_GetSellOrders_WhenAllValuesAreValid()
 		{
-			SellOrderRequest? sellOrderRequest = new SellOrderRequest() 
+			SellOrderRequest? sellOrderRequest = new SellOrderRequest()
 			{
-				StockName="Apple",
-				StockSymbol="aapl",
-				DateAndTimeOfOrder=DateTime.Parse("2012-2-13"),
-				Quantity=122,
-				Price=77.33,
+				StockName = "Apple",
+				StockSymbol = "aapl",
+				DateAndTimeOfOrder = DateTime.Parse("2012-2-13"),
+				Quantity = 122,
+				Price = 77.33,
 			};
-			SellOrderResponse? sellOrderResponse =await _stocksService.CreateSellOrder(sellOrderRequest);
+			SellOrderResponse? sellOrderResponse = await _stocksService.CreateSellOrder(sellOrderRequest);
 			List<SellOrderResponse?>? sellOrderResponses = await _stocksService.GetSellOrders();
 
-			Assert.True(sellOrderResponse.SellOrderID!=Guid.Empty);
+			Assert.True(sellOrderResponse.SellOrderID != Guid.Empty);
 			Assert.Contains(sellOrderResponse, sellOrderResponses);
 
 		}
 		[Fact]
-		public async void GetBuyOrders_WhenBuyOrdersListIsEmpty() 
+		public async void GetBuyOrders_WhenBuyOrdersListIsEmpty()
 		{
 
-			List<BuyOrderResponse?>? buyOrderResponses = await _stocksService.GetBuyOrders();	
+			List<BuyOrderResponse?>? buyOrderResponses = await _stocksService.GetBuyOrders();
 
 			Assert.Empty(buyOrderResponses);
-		
+
 		}
 		[Fact]
-		public async void GetBuyOrders_WhenBuyOrdersListHasBuyOrders() 
+		public async void GetBuyOrders_WhenBuyOrdersListHasBuyOrders()
 		{
 			BuyOrderRequest buyOrderRequest1 = new BuyOrderRequest()
 			{
@@ -250,24 +250,24 @@ namespace StocksApplicationTest
 			buyOrderResponsesFromAdding.Add(await _stocksService.CreateBuyOrder(buyOrderRequest3));
 			buyOrderResponsesFromAdding.Add(await _stocksService.CreateBuyOrder(buyOrderRequest4));
 			buyOrderResponsesFromAdding.Add(await _stocksService.CreateBuyOrder(buyOrderRequest5));
-			
 
-			List<BuyOrderResponse?>? buyOrderResponsesFromGetting = await _stocksService.GetBuyOrders();	
 
-			foreach(BuyOrderResponse? buyOrderResponseFromGetting in buyOrderResponsesFromGetting)
+			List<BuyOrderResponse?>? buyOrderResponsesFromGetting = await _stocksService.GetBuyOrders();
+
+			foreach (BuyOrderResponse? buyOrderResponseFromGetting in buyOrderResponsesFromGetting)
 			{
 				Assert.Contains(buyOrderResponseFromGetting, buyOrderResponsesFromAdding);
 			}
-		
+
 		}
 		[Fact]
-		public async void GetSellOrders_WhenSellOrdersListIsEmpty() 
+		public async void GetSellOrders_WhenSellOrdersListIsEmpty()
 		{
 			List<SellOrderResponse?>? sellOrderResponses = await _stocksService.GetSellOrders();
 			Assert.Empty(sellOrderResponses);
 		}
 		[Fact]
-		public async void GetSellOrders_WhenSellOrdersListHasSellOrders() 
+		public async void GetSellOrders_WhenSellOrdersListHasSellOrders()
 		{
 
 			SellOrderRequest sellOrderRequest1 = new SellOrderRequest()

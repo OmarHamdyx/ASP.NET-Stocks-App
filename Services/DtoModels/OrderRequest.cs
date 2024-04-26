@@ -18,6 +18,7 @@ namespace Application.DtoModels
 		[Required(ErrorMessage = "StockName is required")]
 		public string? StockName { get; set; }
 
+		[Required(ErrorMessage = "Please Enter Quantity")]
 		[Range(1, 100000, ErrorMessage = "Quantity must be between 1 and 100000")]
 		public int? Quantity { get; set; }
 
