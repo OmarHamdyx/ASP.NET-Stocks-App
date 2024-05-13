@@ -3,13 +3,10 @@ using StocksApp.ViewModels;
 using Application.Interfaces;
 using Domain.Entities;
 using Application.DtoModels;
-using System.Globalization;
 namespace StocksApp.Controllers
 {
 	[Controller]
 	//Parent route
-	[Route("[controller]")]
-
 	public class StocksAppController : Controller
 	{
 
@@ -26,9 +23,7 @@ namespace StocksApp.Controllers
 		}
 
 		[Route("")]
-		[Route("/")]
-		[HttpGet("[action]")]
-		[HttpGet("stock-details")]
+		[Route("[Controller]/[Action]")]
 		public async Task<IActionResult?> GetStockDetails(string? symbol, int? quantity , List<string?>? errors)
 		{
 			ViewBag.ErrorMessages = errors;
@@ -62,8 +57,7 @@ namespace StocksApp.Controllers
 			return View("StockDetails",stockDetailsViewModel);
 		}
 
-		[HttpPost("[action]")]
-		[HttpPost("stock-details")]
+		[Route("[Controller]/[Action]")]
 		public async Task<IActionResult> PostOrder(OrderRequest? orderRequest, IFormCollection? form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
 		{
 			
@@ -85,7 +79,7 @@ namespace StocksApp.Controllers
 						Quantity = (uint)orderRequest.Quantity,
 						Price = orderRequest.Price,
 					};
-					await _stocksService.CreateBuyOrder(buyOrderRequest);
+					await _stocksService.CreateBuyOrderAsync(buyOrderRequest);
 				}
 
 			}
@@ -108,23 +102,22 @@ namespace StocksApp.Controllers
 						Price = orderRequest.Price,
 					};
 
-					await _stocksService.CreateSellOrder(sellOrderRequest);
+					await _stocksService.CreateSellOrderAsync(sellOrderRequest);
 				}
 
 			}
 			return RedirectToAction("GetStockDetails", new { Symbol = orderRequest.StockSymbol,Quantity = orderRequest.Quantity });
 		}
 
-		[HttpGet("[action]")]
-		[HttpGet("orders")]
+		[Route("[Controller]/[Action]")]
 		public async Task<IActionResult?> GetOrders()
 		{
 
 			OrdersViewModel ordersViewModel = new OrdersViewModel()
 			{
-				BuyOrders = await _stocksService.GetBuyOrders(),
+				BuyOrders = await _stocksService.GetBuyOrdersAsync(),
 
-				SellOrders = await _stocksService.GetSellOrders()
+				SellOrders = await _stocksService.GetSellOrdersAsync()
 			};
 
 			return View("Orders", ordersViewModel);

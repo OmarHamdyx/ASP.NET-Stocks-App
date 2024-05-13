@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StocksApp", "StocksApp\StocksApp.csproj", "{E272B562-1E8D-430C-B441-49FC0C0DFE31}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Infrastructure", "Models\Infrastructure.csproj", "{83393288-F608-4870-BA38-BA6CF5352675}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E2C90B26-FAF5-4E97-8B71-E7F14A181A1F} = {E2C90B26-FAF5-4E97-8B71-E7F14A181A1F}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StocksApplicationTest", "StocksApplicationTest\StocksApplicationTest.csproj", "{A1FF0B45-5E44-4D89-B98B-7AA98447F350}"
 EndProject

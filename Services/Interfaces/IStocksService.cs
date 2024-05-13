@@ -9,11 +9,10 @@ namespace Application.Interfaces
 {
 	public interface IStocksService
 	{
-		public Task<BuyOrderResponse?> CreateBuyOrder(BuyOrderRequest? buyOrderRequest);
-		public Task<SellOrderResponse?> CreateSellOrder(SellOrderRequest? sellOrderRequest);
-		public Task<List<BuyOrderResponse?>?> GetBuyOrders();
-		public Task<List<SellOrderResponse?>?> GetSellOrders();
-
+		public Task<BuyOrderResponse?> CreateBuyOrderAsync(BuyOrderRequest? buyOrderRequest);
+		public Task<SellOrderResponse?> CreateSellOrderAsync(SellOrderRequest? sellOrderRequest);
+		public Task<List<BuyOrderResponse?>?> GetBuyOrdersAsync();
+		public Task<List<SellOrderResponse?>?> GetSellOrdersAsync();
 		public string? CurrentStockSumbol { get; set; }
 	}
 }

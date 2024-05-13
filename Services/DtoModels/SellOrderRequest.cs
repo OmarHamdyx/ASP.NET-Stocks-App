@@ -25,7 +25,7 @@ namespace Application.DtoModels{
 		{
 			return new SellOrder()
 			{
-				SellOrderID=Guid.NewGuid(),
+				SellOrderId=Guid.NewGuid(),
 				StockSymbol = StockSymbol,
 				StockName = StockName,
 				DateAndTimeOfOrder = DateAndTimeOfOrder,
