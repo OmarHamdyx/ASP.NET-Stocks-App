@@ -16,7 +16,7 @@ namespace Application.Services
 			_buyOrders = new List<BuyOrder>();
 			_sellOrders = new List<SellOrder>();		
 		}
-		public async Task<BuyOrderResponse?> CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
+		public async Task<BuyOrderResponse?> CreateBuyOrderAsync(BuyOrderRequest? buyOrderRequest)
 		{
 			ArgumentNullException.ThrowIfNull(buyOrderRequest);
 
@@ -34,7 +34,7 @@ namespace Application.Services
 			return buyOrder.ToBuyOrderResponse();
 		}
 
-		public async Task<SellOrderResponse?> CreateSellOrder(SellOrderRequest? sellOrderRequest)
+		public async Task<SellOrderResponse?> CreateSellOrderAsync(SellOrderRequest? sellOrderRequest)
 		{
 			ArgumentNullException.ThrowIfNull(sellOrderRequest);
 
@@ -52,7 +52,7 @@ namespace Application.Services
 			return sellOrder.ToSellOrderResponse();	
 		}
 
-		public async  Task<List<BuyOrderResponse?>?> GetBuyOrders()
+		public async  Task<List<BuyOrderResponse?>?> GetBuyOrdersAsync()
 		{
 			List<BuyOrderResponse?>? buyOrderResponses = new List<BuyOrderResponse?>();
 			foreach (BuyOrder buyOrder in _buyOrders) 
@@ -62,7 +62,7 @@ namespace Application.Services
 			return buyOrderResponses;
 		}
 
-		public async Task<List<SellOrderResponse?>?> GetSellOrders()
+		public async Task<List<SellOrderResponse?>?> GetSellOrdersAsync()
 		{
 			List<SellOrderResponse?>? sellOrderResponses = new List<SellOrderResponse?>();
 			foreach (SellOrder sellOrder in _sellOrders) 

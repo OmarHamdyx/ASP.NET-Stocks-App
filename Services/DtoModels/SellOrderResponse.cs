@@ -45,7 +45,7 @@ namespace Application.DtoModels
 		{
 			return new SellOrderResponse()
 			{
-				SellOrderID = sellOrder.SellOrderID,
+				SellOrderID = sellOrder.SellOrderId,
 				StockName = sellOrder.StockName,
 				StockSymbol = sellOrder.StockSymbol,
 				DateAndTimeOfOrder = sellOrder.DateAndTimeOfOrder,

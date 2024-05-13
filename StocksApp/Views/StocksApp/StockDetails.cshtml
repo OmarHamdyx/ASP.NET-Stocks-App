@@ -27,13 +27,12 @@
 			<div class="border-l-2 ml-5 h-auto border-white"></div>
 			<div class="ml-5">
 				<p class="text-2xl font-bold text-gray-500">New Order</p>
-				<form asp-controller="stocksapp" asp-action="PostOrder" method="post" class="mx-auto max-w-sm">
+				<form asp-controller="StocksApp" asp-action="PostOrder" method="post" class="mx-auto max-w-sm">
 					<label asp-for="Quantity" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
 					<input asp-for="Quantity" placeholder="99999" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-					<input type="hidden" asp-for="StockSymbol" />
-					<input type="hidden" asp-for="StockName" />
-					<input type="hidden" asp-for="Price" />
-
+					<div>
+						<span asp-validation-for="Quantity" class="text-l text-red-500 dark:text-red-500"></span>
+					</div>
 					<button type="submit" name="BuyOrder" value="buy-order-button" class="mb-3 me-2 mt-3 rounded-full bg-green-700 px-5 py-2.5 text-center text-sm font-medium text-white transition delay-150 duration-300 ease-in-out hover:bg-green-800 hover:-translate-y-1 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Buy</button>
 					<button type="submit" name="SellOrder" value="sell-order-button" class="mb-3 me-2 mt-3 rounded-full bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white transition delay-150 duration-300 ease-in-out hover:bg-red-800 hover:-translate-y-1 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Sell</button>
 				</form>
@@ -41,24 +40,25 @@
 		</div>
 	</div>
 </div>
-<span asp-validation-for="Quantity" class="text-red-500 text-sm"></span>
 
- @if (ViewBag.ErrorMessages != null)
+<input type="hidden" asp-for="StockSymbol" />
+<input type="hidden" asp-for="StockName" />
+<input type="hidden" asp-for="Price" />
+<input type="hidden" id="FinnhubToken" value="@ViewBag.Token" />
+
+@* @if (ViewBag.ErrorMessages != null)
 {
 	foreach (string error in ViewBag.ErrorMessages)
 	{
 		<div class="text-red-500 dark:text-red-500">@error</div>
 	}
-} 
+} *@
 
 
-<input type="hidden" id="FinnhubToken" value="@ViewBag.Token" />
 
 @section Scripts {
-	<script src="Scripts/GetStockDetailsScript.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" asp-fallback-test="window.jQuery" asp-fallback-src="Scripts/jquery.min.js"></script>
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.4/jquery.validate.min.js" asp-fallback-test="window.jQuery.validator" asp-fallback-src="Scripts/jquery.validate.min.js"></script>
-
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" asp-fallback-test="window.jQuery.validator.unobstrusive" asp-fallback-src="Scripts/jquery.validate.unobtrusive.min.js"></script>
+	<script src="/Scripts/GetStockDetailsScript.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" asp-fallback-test="window.jQuery" asp-fallback-src="/Scripts/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.4/jquery.validate.min.js" asp-fallback-test="window.jQuery.validator" asp-fallback-src="/Scripts/jquery.validate.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" asp-fallback-test="window.jQuery.validator.unobstrusive" asp-fallback-src="/Scripts/jquery.validate.unobtrusive.min.js"></script>
 }
