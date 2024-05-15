@@ -43,9 +43,9 @@ namespace StocksApp.Controllers
 			StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
 			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
 
-			if (stockModel is null || companyInfo is null)
+			if (stockModel.C is 0 || companyInfo.Name is null || companyInfo.Ticker is null)
 			{
-				return null;
+				return View("NoStockFoundError"); ;
 			}
 			StockDetailsViewModel? stockDetailsViewModel = new StockDetailsViewModel()
 			{
@@ -58,7 +58,7 @@ namespace StocksApp.Controllers
 			return View("StockDetails",stockDetailsViewModel);
 		}
 
-		[Route("[Controller]/[Action]")]
+		[HttpPost("[Controller]/[Action]")]
 		public async Task<IActionResult> PostOrder(StockDetailsViewModel? stockDetailsViewModel, IFormCollection? form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
 		{
 			
