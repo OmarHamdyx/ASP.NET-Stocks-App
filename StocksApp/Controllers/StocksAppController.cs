@@ -42,6 +42,7 @@ namespace StocksApp.Controllers
 
 			StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
 			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
+
 			if (stockModel is null || companyInfo is null)
 			{
 				return null;
@@ -58,7 +59,7 @@ namespace StocksApp.Controllers
 		}
 
 		[Route("[Controller]/[Action]")]
-		public async Task<IActionResult> PostOrder(OrderRequest? orderRequest, IFormCollection? form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
+		public async Task<IActionResult> PostOrder(StockDetailsViewModel? stockDetailsViewModel, IFormCollection? form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
 		{
 			
 			if (form.ContainsKey("BuyOrder"))
@@ -73,11 +74,11 @@ namespace StocksApp.Controllers
 				{
 					BuyOrderRequest buyOrderRequest = new()
 					{
-						StockName = orderRequest.StockName,
-						StockSymbol = orderRequest.StockSymbol,
+						StockName = stockDetailsViewModel.StockName,
+						StockSymbol = stockDetailsViewModel.StockSymbol,
 						DateAndTimeOfOrder = DateTime.Now,
-						Quantity = (uint)orderRequest.Quantity,
-						Price = orderRequest.Price,
+						Quantity = (uint)stockDetailsViewModel.Quantity,
+						Price = stockDetailsViewModel.Price,
 					};
 					await _stocksService.CreateBuyOrderAsync(buyOrderRequest);
 				}
@@ -95,18 +96,18 @@ namespace StocksApp.Controllers
 				{
 					SellOrderRequest sellOrderRequest = new()
 					{
-						StockName = orderRequest.StockName,
-						StockSymbol = orderRequest.StockSymbol,
+						StockName = stockDetailsViewModel.StockName,
+						StockSymbol = stockDetailsViewModel.StockSymbol,
 						DateAndTimeOfOrder = DateTime.Now,
-						Quantity = (uint)orderRequest.Quantity,
-						Price = orderRequest.Price,
+						Quantity = (uint)stockDetailsViewModel.Quantity,
+						Price = stockDetailsViewModel.Price,
 					};
 
 					await _stocksService.CreateSellOrderAsync(sellOrderRequest);
 				}
 
 			}
-			return RedirectToAction("GetStockDetails", new { Symbol = orderRequest.StockSymbol,Quantity = orderRequest.Quantity });
+			return RedirectToAction("GetStockDetails", new { Symbol = stockDetailsViewModel.StockSymbol,Quantity = stockDetailsViewModel.Quantity });
 		}
 
 		[Route("[Controller]/[Action]")]
