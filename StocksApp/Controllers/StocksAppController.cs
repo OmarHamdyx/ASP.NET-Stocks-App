@@ -3,6 +3,7 @@ using StocksApp.ViewModels;
 using Application.Interfaces;
 using Domain.Entities;
 using Application.DtoModels;
+using System.Globalization;
 namespace StocksApp.Controllers
 {
 	[Controller]
@@ -24,54 +25,75 @@ namespace StocksApp.Controllers
 
 		[Route("")]
 		[Route("[Controller]/[Action]")]
-		public async Task<IActionResult?> GetStockDetails(string? symbol, int? quantity , List<string?>? errors)
+		public async Task<IActionResult?> GetStockDetails(string? symbol, int? quantity, List<string?>? errors, bool? errorFlag)
 		{
 			ViewBag.ErrorMessages = errors;
-			
-
-			if (symbol is not null)
-			{
-				_stocksService.CurrentStockSumbol = symbol;
-			}
-			else if (_stocksService.CurrentStockSumbol is not null)
-			{
-				symbol = _stocksService.CurrentStockSumbol;
-			}
-
 			ViewBag.Token = _configuration["finnhubapikey"];
 
-			StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
-			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
-
-			if (stockModel.C is 0 || companyInfo.Name is null || companyInfo.Ticker is null)
+			if (_stocksService.errorFlag is true && symbol is null) 
 			{
-				return View("NoStockFoundError"); ;
+				return View("NoStockFoundError");
 			}
-			StockDetailsViewModel? stockDetailsViewModel = new StockDetailsViewModel()
+			if (symbol is not null || (_stocksService.currentStocksDetails.StockSymbol is null && symbol is null))
 			{
-				Quantity = quantity,
-				StockName = companyInfo.Name,
-				StockSymbol = companyInfo.Ticker,
-				Price = stockModel.C
-				
+				_stocksService.errorFlag = false;
+				_stocksService.searchFlag = true;
+			}
+			if (_stocksService.searchFlag is true)
+			{
+				StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
+				CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
+				_stocksService.searchFlag = false;
+				if (stockModel.C is 0 || companyInfo.Name is null || companyInfo.Ticker is null)
+				{
+					_stocksService.errorFlag = true;
+					return View("NoStockFoundError");
+				}
+				StockDetailsViewModel? StockDetailsViewModel = new StockDetailsViewModel()
+				{
+					Quantity = quantity,
+					StockName = companyInfo.Name,
+					StockSymbol = companyInfo.Ticker,
+					Price = stockModel.C
+
+				};
+
+				_stocksService.currentStocksDetails.Quantity = quantity;
+				_stocksService.currentStocksDetails.StockName = companyInfo.Name;
+				_stocksService.currentStocksDetails.StockSymbol= companyInfo.Ticker;
+				_stocksService.currentStocksDetails.Price = stockModel.C;	
+
+				return View("StockDetails", StockDetailsViewModel);
+			}
+			StockDetailsViewModel? currentSockDetailsViewModel = new StockDetailsViewModel()
+			{
+				Quantity = _stocksService.currentStocksDetails.Quantity,
+				StockName = _stocksService.currentStocksDetails.StockName,
+				StockSymbol = _stocksService.currentStocksDetails.StockSymbol,
+				Price = _stocksService.currentStocksDetails.Price
 			};
-			return View("StockDetails",stockDetailsViewModel);
+			return View("StockDetails", currentSockDetailsViewModel);
+
+
+
+
 		}
 
 		[HttpPost("[Controller]/[Action]")]
 		public async Task<IActionResult> PostOrder(StockDetailsViewModel? stockDetailsViewModel, IFormCollection? form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
 		{
-			
-			if (form.ContainsKey("BuyOrder"))
+			if (!ModelState.IsValid)
 			{
-				if (!ModelState.IsValid)
-				{
-					List<string> errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+				List<string> errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
 
-					return RedirectToAction("GetStockDetails", new{Errors=errors });
-				}
-				else
+				return RedirectToAction("GetStockDetails", new { Errors = errors });
+			}
+			else
+			{
+				if (form.ContainsKey("BuyOrder"))
 				{
+
+
 					BuyOrderRequest buyOrderRequest = new()
 					{
 						StockName = stockDetailsViewModel.StockName,
@@ -81,19 +103,12 @@ namespace StocksApp.Controllers
 						Price = stockDetailsViewModel.Price,
 					};
 					await _stocksService.CreateBuyOrderAsync(buyOrderRequest);
-				}
 
-			}
-			else if (form.ContainsKey("SellOrder"))
-			{
-
-				if (!ModelState.IsValid)
-				{
-					List<string> errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-					return RedirectToAction("GetStockDetails", new { Errors = errors });
 				}
-				else
+				else if (form.ContainsKey("SellOrder"))
 				{
+
+
 					SellOrderRequest sellOrderRequest = new()
 					{
 						StockName = stockDetailsViewModel.StockName,
@@ -104,10 +119,10 @@ namespace StocksApp.Controllers
 					};
 
 					await _stocksService.CreateSellOrderAsync(sellOrderRequest);
-				}
 
+				}
+				return RedirectToAction("GetStockDetails", new { StockDetailsViewModel = stockDetailsViewModel });
 			}
-			return RedirectToAction("GetStockDetails", new { Symbol = stockDetailsViewModel.StockSymbol,Quantity = stockDetailsViewModel.Quantity });
 		}
 
 		[Route("[Controller]/[Action]")]
