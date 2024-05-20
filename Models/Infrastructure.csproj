@@ -22,10 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Interfaces\Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Repositories\" />
+    <ProjectReference Include="..\Services\Application.csproj" />
   </ItemGroup>
 
 </Project>

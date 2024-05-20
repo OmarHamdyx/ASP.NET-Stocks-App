@@ -30,23 +30,23 @@ namespace StocksApp.Controllers
 			ViewBag.ErrorMessages = errors;
 			ViewBag.Token = _configuration["finnhubapikey"];
 
-			if (_stocksService.errorFlag is true && symbol is null) 
+			if (_stocksService.ErrorFlag is true && symbol is null) 
 			{
 				return View("NoStockFoundError");
 			}
-			if (symbol is not null || (_stocksService.currentStocksDetails.StockSymbol is null && symbol is null))
+			if (symbol is not null || (_stocksService.CurrentStocksDetails.StockSymbol is null && symbol is null))
 			{
-				_stocksService.errorFlag = false;
-				_stocksService.searchFlag = true;
+				_stocksService.ErrorFlag = false;
+				_stocksService.SearchFlag = true;
 			}
-			if (_stocksService.searchFlag is true)
+			if (_stocksService.SearchFlag is true)
 			{
 				StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
 				CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
-				_stocksService.searchFlag = false;
+				_stocksService.SearchFlag = false;
 				if (stockModel.C is 0 || companyInfo.Name is null || companyInfo.Ticker is null)
 				{
-					_stocksService.errorFlag = true;
+					_stocksService.ErrorFlag = true;
 					return View("NoStockFoundError");
 				}
 				StockDetailsViewModel? StockDetailsViewModel = new StockDetailsViewModel()
@@ -58,19 +58,19 @@ namespace StocksApp.Controllers
 
 				};
 
-				_stocksService.currentStocksDetails.Quantity = quantity;
-				_stocksService.currentStocksDetails.StockName = companyInfo.Name;
-				_stocksService.currentStocksDetails.StockSymbol= companyInfo.Ticker;
-				_stocksService.currentStocksDetails.Price = stockModel.C;	
+				_stocksService.CurrentStocksDetails.Quantity = quantity;
+				_stocksService.CurrentStocksDetails.StockName = companyInfo.Name;
+				_stocksService.CurrentStocksDetails.StockSymbol= companyInfo.Ticker;
+				_stocksService.CurrentStocksDetails.Price = stockModel.C;	
 
 				return View("StockDetails", StockDetailsViewModel);
 			}
 			StockDetailsViewModel? currentSockDetailsViewModel = new StockDetailsViewModel()
 			{
-				Quantity = _stocksService.currentStocksDetails.Quantity,
-				StockName = _stocksService.currentStocksDetails.StockName,
-				StockSymbol = _stocksService.currentStocksDetails.StockSymbol,
-				Price = _stocksService.currentStocksDetails.Price
+				Quantity = _stocksService.CurrentStocksDetails.Quantity,
+				StockName = _stocksService.CurrentStocksDetails.StockName,
+				StockSymbol = _stocksService.CurrentStocksDetails.StockSymbol,
+				Price = _stocksService.CurrentStocksDetails.Price
 			};
 			return View("StockDetails", currentSockDetailsViewModel);
 
@@ -93,7 +93,6 @@ namespace StocksApp.Controllers
 				if (form.ContainsKey("BuyOrder"))
 				{
 
-
 					BuyOrderRequest buyOrderRequest = new()
 					{
 						StockName = stockDetailsViewModel.StockName,
@@ -102,6 +101,7 @@ namespace StocksApp.Controllers
 						Quantity = (uint)stockDetailsViewModel.Quantity,
 						Price = stockDetailsViewModel.Price,
 					};
+
 					await _stocksService.CreateBuyOrderAsync(buyOrderRequest);
 
 				}
