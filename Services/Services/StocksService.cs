@@ -10,9 +10,9 @@ namespace Application.Services
 		private readonly List<BuyOrder> _buyOrders;
 		private readonly List<SellOrder> _sellOrders;
 
-		public CurrentStocksDetails? currentStocksDetails { get; set; } = new CurrentStocksDetails();
-		public bool searchFlag { get; set; }
-		public bool errorFlag { get; set; }
+		public CurrentStocksDetails? CurrentStocksDetails { get; set; } = new CurrentStocksDetails();
+		public bool SearchFlag { get; set; }
+		public bool ErrorFlag { get; set; }
 
 		public StocksService() 
 		{
