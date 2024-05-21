@@ -9,16 +9,16 @@ namespace Application.Interfaces
 {
 	public interface IStocksAppRepository
 	{
-		public Task<BuyOrderResponse?>? PostBuyOrderAsync(BuyOrderRequest? buyOrderRequest);
+		public Task<BuyOrderResponse?> PostBuyOrderAsync(BuyOrderRequest? buyOrderRequest);
 		public Task? DeleteBuyOrderAsync(Guid? guid);
-		public Task<BuyOrderResponse?>? GetBuyOrderAsync(Guid? guid);
-		public Task<List<BuyOrderResponse>?>? GetBuyOrdersAsync();
+		public Task<BuyOrderResponse?> GetBuyOrderAsync(Guid? guid);
+		public Task<List<BuyOrderResponse>?> GetBuyOrdersAsync();
 
 
-		public Task<SellOrderResponse?>? PostSellOrderAsync(SellOrderRequest? sellOrderRequest);
+		public Task<SellOrderResponse?> PostSellOrderAsync(SellOrderRequest? sellOrderRequest);
 		public Task? DeleteSellOrderAsync(Guid? guid);
-		public Task<SellOrderResponse?>? GetSellOrderAsync(Guid? guid);
-		public Task<List<SellOrderResponse>?>? GetSellOrdersAsync();
+		public Task<SellOrderResponse?> GetSellOrderAsync(Guid? guid);
+		public Task<List<SellOrderResponse>?> GetSellOrdersAsync();
 
 
 	}

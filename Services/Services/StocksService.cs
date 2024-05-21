@@ -9,15 +9,16 @@ namespace Application.Services
 	{
 		private readonly List<BuyOrder> _buyOrders;
 		private readonly List<SellOrder> _sellOrders;
-
+		private readonly IStocksAppRepository _stocksAppRepository;
 		public CurrentStocksDetails? CurrentStocksDetails { get; set; } = new CurrentStocksDetails();
 		public bool SearchFlag { get; set; }
 		public bool ErrorFlag { get; set; }
 
-		public StocksService() 
+		public StocksService(IStocksAppRepository stocksAppRepository) 
 		{
-			_buyOrders = new List<BuyOrder>();
-			_sellOrders = new List<SellOrder>();		
+			_stocksAppRepository = stocksAppRepository;	
+			//_buyOrders = new List<BuyOrder>();
+			//_sellOrders = new List<SellOrder>();		
 		}
 		public async Task<BuyOrderResponse?> CreateBuyOrderAsync(BuyOrderRequest? buyOrderRequest)
 		{
@@ -32,9 +33,10 @@ namespace Application.Services
 				throw new ArgumentException(nameof(buyOrderRequest));	
 			}
 			
-			BuyOrder buyOrder = buyOrderRequest.ToBuyOrder();
-			_buyOrders.Add(buyOrder);
-			return buyOrder.ToBuyOrderResponse();
+			//BuyOrder buyOrder = buyOrderRequest.ToBuyOrder();
+			////_buyOrders.Add(buyOrder);
+			
+			return await _stocksAppRepository.PostBuyOrderAsync(buyOrderRequest);
 		}
 
 		public async Task<SellOrderResponse?> CreateSellOrderAsync(SellOrderRequest? sellOrderRequest)
@@ -49,30 +51,32 @@ namespace Application.Services
 			{
 				throw new ArgumentException(nameof(sellOrderRequest));
 			}
-			SellOrder sellOrder = sellOrderRequest.ToSellOrder();
-			_sellOrders.Add(sellOrder);
+			//SellOrder sellOrder = sellOrderRequest.ToSellOrder();
+			//_sellOrders.Add(sellOrder);
 
-			return sellOrder.ToSellOrderResponse();	
+			return await _stocksAppRepository.PostSellOrderAsync(sellOrderRequest);	
 		}
 
 		public async  Task<List<BuyOrderResponse?>?> GetBuyOrdersAsync()
 		{
-			List<BuyOrderResponse?>? buyOrderResponses = new List<BuyOrderResponse?>();
-			foreach (BuyOrder buyOrder in _buyOrders) 
-			{
-				buyOrderResponses.Add(buyOrder.ToBuyOrderResponse());
-			}
-			return buyOrderResponses;
+			//List<BuyOrderResponse?>? buyOrderResponses = new List<BuyOrderResponse?>();
+			//foreach (BuyOrder buyOrder in _buyOrders) 
+			//{
+			//	buyOrderResponses.Add(buyOrder.ToBuyOrderResponse());
+			//}
+			//return buyOrderResponses;
+			return await _stocksAppRepository.GetBuyOrdersAsync();
 		}
 
 		public async Task<List<SellOrderResponse?>?> GetSellOrdersAsync()
 		{
-			List<SellOrderResponse?>? sellOrderResponses = new List<SellOrderResponse?>();
-			foreach (SellOrder sellOrder in _sellOrders) 
-			{
-				sellOrderResponses.Add(sellOrder.ToSellOrderResponse());
-			}
-			return sellOrderResponses;
+			//List<SellOrderResponse?>? sellOrderResponses = new List<SellOrderResponse?>();
+			//foreach (SellOrder sellOrder in _sellOrders) 
+			//{
+			//	sellOrderResponses.Add(sellOrder.ToSellOrderResponse());
+			//}
+			//return sellOrderResponses;
+			return await _stocksAppRepository.GetSellOrdersAsync();
 		}
 	}
 }

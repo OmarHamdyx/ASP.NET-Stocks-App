@@ -3,6 +3,7 @@ using Application.Services;
 using Application.Interfaces;
 using Infrastructure.DbContexts;
 using Microsoft.EntityFrameworkCore;
+using Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
@@ -10,7 +11,8 @@ builder.Services.Configure<DefaultSymbolOption>(builder.Configuration.GetSection
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<MsSqlServerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MsSqlServerConnectionString")));
 builder.Services.AddScoped<IFinnhubService, FinnhubService>();
-builder.Services.AddSingleton<IStocksService, StocksService>();
+builder.Services.AddScoped<IStocksService, StocksService>();
+builder.Services.AddScoped<IStocksAppRepository, StocksAppRepository>();
 
 var app = builder.Build();
 

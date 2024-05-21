@@ -1,15 +1,25 @@
 using Application.DtoModels;
 using Application.Interfaces;
 using Application.Services;
+using Infrastructure.DbContexts;
+using Infrastructure.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
 namespace StocksApplicationTest
 {
 	public class StocksServiceTest
 	{
 		private readonly IStocksService _stocksService;
-
+		private readonly IConfiguration _configuration;
 		public StocksServiceTest()
 		{
-			_stocksService = new StocksService();
+			var builder = new ConfigurationBuilder()
+			.SetBasePath("O:\\Repositories\\ASP.NET-Stocks-App\\StocksApp") 
+			.AddJsonFile("appsettings.json");
+			IConfigurationRoot configuration = builder.Build();
+
+			_stocksService = new StocksService(new StocksAppRepository(new MsSqlServerDbContext(new DbContextOptionsBuilder<MsSqlServerDbContext>().UseSqlServer(configuration.GetConnectionString("MsSqlServerConnectionString")).Options)));
 		}
 
 		[Fact]
@@ -86,7 +96,6 @@ namespace StocksApplicationTest
 		[Fact]
 		public async Task CreateBuyOrderAsync_GetBuyOrdersAsync_WhenAllValuesAreValid()
 		{
-
 			BuyOrderRequest buyOrderRequest = new BuyOrderRequest()
 			{
 				StockName = "Microsoft",
@@ -97,11 +106,13 @@ namespace StocksApplicationTest
 			};
 
 			BuyOrderResponse? buyOrderResponse = await _stocksService.CreateBuyOrderAsync(buyOrderRequest);
+
 			List<BuyOrderResponse?>? buyOrderResponses = await _stocksService.GetBuyOrdersAsync();
 
 			Assert.True(buyOrderResponse.BuyOrderID != Guid.Empty);
-			Assert.Contains(buyOrderResponse, buyOrderResponses);
+			Assert.Contains(buyOrderResponse, buyOrderResponses, new BuyOrderResponseComparer());
 		}
+
 		[Fact]
 		public async Task CreateSellOrderAsync_WhenSellOrderRequestIsNull()
 		{
@@ -177,7 +188,7 @@ namespace StocksApplicationTest
 			{
 				StockName = "Apple",
 				StockSymbol = "aapl",
-				DateAndTimeOfOrder = DateTime.Parse("2012-2-13"),
+				DateAndTimeOfOrder = DateTime.Now,
 				Quantity = 122,
 				Price = 77.33,
 			};
@@ -185,7 +196,8 @@ namespace StocksApplicationTest
 			List<SellOrderResponse?>? sellOrderResponses = await _stocksService.GetSellOrdersAsync();
 
 			Assert.True(sellOrderResponse.SellOrderID != Guid.Empty);
-			Assert.Contains(sellOrderResponse, sellOrderResponses);
+			Assert.Contains(sellOrderResponse, sellOrderResponses, new SellOrderResponseComparer());
+
 
 		}
 		[Fact]
@@ -244,6 +256,7 @@ namespace StocksApplicationTest
 				Quantity = 35,
 				Price = 18.90
 			};
+
 			List<BuyOrderResponse?>? buyOrderResponsesFromAdding =
 			[
 				await _stocksService.CreateBuyOrderAsync(buyOrderRequest1),
@@ -258,7 +271,8 @@ namespace StocksApplicationTest
 
 			foreach (BuyOrderResponse? buyOrderResponseFromGetting in buyOrderResponsesFromGetting)
 			{
-				Assert.Contains(buyOrderResponseFromGetting, buyOrderResponsesFromAdding);
+				Assert.Contains(buyOrderResponseFromGetting, buyOrderResponsesFromAdding, new BuyOrderResponseComparer());
+
 			}
 
 		}
@@ -330,7 +344,7 @@ namespace StocksApplicationTest
 
 			foreach (SellOrderResponse? sellOrderResponseFromGetting in sellOrderResponsesFromGetting)
 			{
-				Assert.Contains(sellOrderResponseFromGetting, sellOrderResponsesFromAdding);
+				Assert.Contains(sellOrderResponseFromGetting, sellOrderResponsesFromAdding,new SellOrderResponseComparer());
 			}
 
 		}

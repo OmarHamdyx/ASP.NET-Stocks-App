@@ -15,7 +15,7 @@ namespace Infrastructure.Repositories
 			_msSqlServerDbContext = msSqlServerDbContext;
 		}
 
-		public async Task? DeleteBuyOrderAsync(Guid? guid)
+		public async Task DeleteBuyOrderAsync(Guid? guid)
 		{
 			await _msSqlServerDbContext.Database.ExecuteSqlRawAsync("EXEC DeleteBuyOrder @BuyOrderId", new SqlParameter("@BuyOrderId", guid));
 		}
@@ -26,35 +26,36 @@ namespace Infrastructure.Repositories
 
 		}
 
-		public async Task<BuyOrderResponse?>? GetBuyOrderAsync(Guid? guid)
+		public async Task<BuyOrderResponse?> GetBuyOrderAsync(Guid? guid)
 		{
 			return (await _msSqlServerDbContext.BuyOrders
 						.FromSqlRaw("EXEC GetBuyOrder @BuyOrderId", new SqlParameter("@BuyOrderId", guid))
 							.FirstOrDefaultAsync())
 								.ToBuyOrderResponse();
 		}
-		public async Task<SellOrderResponse?>? GetSellOrderAsync(Guid? guid)
+		public async Task<SellOrderResponse?> GetSellOrderAsync(Guid? guid)
 		{
 			return (await _msSqlServerDbContext.SellOrders
 						.FromSqlRaw("EXEC GetSellOrder @SellOrderId", new SqlParameter("@SellOrderId", guid))
 							.FirstOrDefaultAsync())
 								.ToSellOrderResponse();
 		}
-		public async Task<List<BuyOrderResponse?>?>? GetBuyOrdersAsync()
+		public async Task<List<BuyOrderResponse?>?> GetBuyOrdersAsync()
 		{
-			return await _msSqlServerDbContext.BuyOrders
-				.FromSqlRaw("EXEC GetBuyOrders")
-				.Select(buyOrder => buyOrder.ToBuyOrderResponse())
-				.ToListAsync();
+			IEnumerable<BuyOrder> buyOrders = await _msSqlServerDbContext.BuyOrders
+						.FromSqlRaw("EXEC GetBuyOrders")
+							.ToListAsync();
+
+			return buyOrders.Select(buyOrder => buyOrder.ToBuyOrderResponse()).ToList();	
 		}
-		public async Task<List<SellOrderResponse?>?>? GetSellOrdersAsync()
+		public async Task<List<SellOrderResponse?>?> GetSellOrdersAsync()
 		{
-			return await _msSqlServerDbContext.SellOrders
-						.FromSqlRaw("EXEC GetSellOrders")
-							.Select(sellOrder => sellOrder.ToSellOrderResponse())
-								.ToListAsync();
+			IEnumerable<SellOrder> sellOrders = await _msSqlServerDbContext.SellOrders
+						.FromSqlRaw("EXEC GetSellOrders").ToListAsync();
+
+			return sellOrders.Select(sellOrder => sellOrder.ToSellOrderResponse()).ToList() ;
 		}
-		public async Task<BuyOrderResponse?>? PostBuyOrderAsync(BuyOrderRequest buyOrderRequest)
+		public async Task<BuyOrderResponse?> PostBuyOrderAsync(BuyOrderRequest buyOrderRequest)
 		{
 			BuyOrder buyOrder = buyOrderRequest.ToBuyOrder();
 
@@ -64,7 +65,7 @@ namespace Infrastructure.Repositories
 				new SqlParameter("@StockSymbol", buyOrder.StockSymbol),
 				new SqlParameter("@StockName", buyOrder.StockName),
 				new SqlParameter("@DateAndTimeOfOrder", buyOrder.DateAndTimeOfOrder),
-				new SqlParameter("@Quantity", buyOrder.Quantity),
+				new SqlParameter("@Quantity", (long)buyOrder.Quantity),
 				new SqlParameter("@Price", buyOrder.Price)
 			];
 
@@ -74,7 +75,7 @@ namespace Infrastructure.Repositories
 		}
 
 
-		public async Task<SellOrderResponse?>? PostSellOrderAsync(SellOrderRequest sellOrderRequest)
+		public async Task<SellOrderResponse?> PostSellOrderAsync(SellOrderRequest sellOrderRequest)
 		{
 			SellOrder sellOrder = sellOrderRequest.ToSellOrder();
 
@@ -82,7 +83,7 @@ namespace Infrastructure.Repositories
 				new SqlParameter("@StockSymbol", sellOrder.StockSymbol),
 				new SqlParameter("@StockName", sellOrder.StockName),
 				new SqlParameter("@DateAndTimeOfOrder", sellOrder.DateAndTimeOfOrder),
-				new SqlParameter("@Quantity", sellOrder.Quantity),
+				new SqlParameter("@Quantity", (long)sellOrder.Quantity),
 				new SqlParameter("@Price", sellOrder.Price)];
 
 			await _msSqlServerDbContext.Database.ExecuteSqlRawAsync("EXEC PostSellOrder @SellOrderId, @StockSymbol, @StockName, @DateAndTimeOfOrder, @Quantity, @Price", sqlParameters);
