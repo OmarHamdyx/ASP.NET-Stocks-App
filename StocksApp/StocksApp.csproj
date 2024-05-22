@@ -8,16 +8,25 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\StocksApp\Orders.cshtml~RF16d5b4ab.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Rotativa.AspNetCore" Version="1.3.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Interfaces\Domain.csproj" />
     <ProjectReference Include="..\Models\Infrastructure.csproj" />
     <ProjectReference Include="..\Services\Application.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\Rotativa\" />
   </ItemGroup>
 
 </Project>

@@ -21,8 +21,6 @@ namespace StocksApplicationTest
 
 			_stocksService = new StocksService(new StocksAppRepository(new MsSqlServerDbContext(new DbContextOptionsBuilder<MsSqlServerDbContext>().UseSqlServer(configuration.GetConnectionString("MsSqlServerConnectionString")).Options)));
 		}
-
-		[Fact]
 		public async Task CreateBuyOrdeAsync_WhenBuyOrderRequestIsNull()
 		{
 			BuyOrderRequest? buyOrderRequest = null;
