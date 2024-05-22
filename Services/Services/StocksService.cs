@@ -10,9 +10,7 @@ namespace Application.Services
 		private readonly List<BuyOrder> _buyOrders;
 		private readonly List<SellOrder> _sellOrders;
 		private readonly IStocksAppRepository _stocksAppRepository;
-		public CurrentStocksDetails? CurrentStocksDetails { get; set; } = new CurrentStocksDetails();
-		public bool SearchFlag { get; set; }
-		public bool ErrorFlag { get; set; }
+		
 
 		public StocksService(IStocksAppRepository stocksAppRepository) 
 		{
