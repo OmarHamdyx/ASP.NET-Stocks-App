@@ -32,6 +32,7 @@ namespace Infrastructure.DbContexts
 
 			modelBuilder.Entity<UserSellOrder>().HasOne(uso => uso.User).WithMany(u => u.UserSellOrders).HasForeignKey(uso => uso.UserId);
 			modelBuilder.Entity<SellOrder>().HasOne(so => so.UserSellOrder).WithOne(uso => uso.SellOrder).HasForeignKey<UserSellOrder>(uso=>uso.SellOrderId);
+			
 			base.OnModelCreating(modelBuilder);
 
 		}

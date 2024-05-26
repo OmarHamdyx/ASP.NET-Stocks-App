@@ -14,12 +14,14 @@ namespace StocksApplicationTest
 		private readonly IConfiguration _configuration;
 		public StocksServiceTest()
 		{
-			var builder = new ConfigurationBuilder()
-			.SetBasePath("O:\\Repositories\\ASP.NET-Stocks-App\\StocksApp") 
-			.AddJsonFile("appsettings.json");
-			IConfigurationRoot configuration = builder.Build();
+			//var builder = new ConfigurationBuilder()
+			//.SetBasePath("O:\\Repositories\\ASP.NET-Stocks-App\\StocksApp") 
+			//.AddJsonFile("appsettings.json");
+			//IConfigurationRoot configuration = builder.Build();
 
-			_stocksService = new StocksService(new StocksAppRepository(new MsSqlServerDbContext(new DbContextOptionsBuilder<MsSqlServerDbContext>().UseSqlServer(configuration.GetConnectionString("MsSqlServerConnectionString")).Options)));
+			
+			//_stocksService = new StocksService(new StocksAppRepository(new MsSqlServerDbContext(new DbContextOptionsBuilder<MsSqlServerDbContext>().UseSqlServer(configuration.GetConnectionString("MsSqlServerConnectionString")).Options)));
+
 		}
 		public async Task CreateBuyOrdeAsync_WhenBuyOrderRequestIsNull()
 		{
