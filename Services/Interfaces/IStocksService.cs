@@ -13,7 +13,6 @@ namespace Application.Interfaces
 		public Task<SellOrderResponse?> CreateSellOrderAsync(SellOrderRequest? sellOrderRequest);
 		public Task<List<BuyOrderResponse?>?> GetBuyOrdersAsync();
 		public Task<List<SellOrderResponse?>?> GetSellOrdersAsync();
-		
-		
+			
 	}
 }

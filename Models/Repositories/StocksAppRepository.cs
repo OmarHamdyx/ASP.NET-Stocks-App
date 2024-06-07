@@ -26,32 +26,34 @@ namespace Infrastructure.Repositories
 
 		}
 
-		public async Task<BuyOrderResponse?> GetBuyOrderAsync(Guid? guid)
+		public async Task<BuyOrderResponse?> GetBuyOrderByIdAsync(Guid? guid)
 		{
-			return (await _msSqlServerDbContext.BuyOrders
-						.FromSqlRaw("EXEC GetBuyOrder @BuyOrderId", new SqlParameter("@BuyOrderId", guid))
-							.FirstOrDefaultAsync())
-								.ToBuyOrderResponse();
+			
+			return ( await _msSqlServerDbContext.BuyOrders
+												.FromSqlRaw("EXEC GetBuyOrder @BuyOrderId", new SqlParameter("@BuyOrderId", guid))
+												.FirstOrDefaultAsync())
+												.ToBuyOrderResponse();
 		}
-		public async Task<SellOrderResponse?> GetSellOrderAsync(Guid? guid)
+		public async Task<SellOrderResponse?> GetSellOrderByIdAsync(Guid? guid)
 		{
-			return (await _msSqlServerDbContext.SellOrders
-						.FromSqlRaw("EXEC GetSellOrder @SellOrderId", new SqlParameter("@SellOrderId", guid))
-							.FirstOrDefaultAsync())
-								.ToSellOrderResponse();
+			return ( await _msSqlServerDbContext.SellOrders
+												.FromSqlRaw("EXEC GetSellOrder @SellOrderId", new SqlParameter("@SellOrderId", guid))
+												.FirstOrDefaultAsync())
+												.ToSellOrderResponse();
 		}
 		public async Task<List<BuyOrderResponse?>?> GetBuyOrdersAsync()
 		{
-			IEnumerable<BuyOrder> buyOrders = await _msSqlServerDbContext.BuyOrders
-						.FromSqlRaw("EXEC GetBuyOrders")
-							.ToListAsync();
+			IEnumerable <BuyOrder> buyOrders = await _msSqlServerDbContext.BuyOrders
+																		  .FromSqlRaw("EXEC GetBuyOrders")
+																		  .ToListAsync();
 
 			return buyOrders.Select(buyOrder => buyOrder.ToBuyOrderResponse()).ToList();	
 		}
 		public async Task<List<SellOrderResponse?>?> GetSellOrdersAsync()
 		{
-			IEnumerable<SellOrder> sellOrders = await _msSqlServerDbContext.SellOrders
-						.FromSqlRaw("EXEC GetSellOrders").ToListAsync();
+			IEnumerable <SellOrder> sellOrders = await _msSqlServerDbContext.SellOrders
+																			.FromSqlRaw("EXEC GetSellOrders")
+																			.ToListAsync();
 
 			return sellOrders.Select(sellOrder => sellOrder.ToSellOrderResponse()).ToList() ;
 		}
