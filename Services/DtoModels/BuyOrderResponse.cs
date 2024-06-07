@@ -17,16 +17,15 @@ namespace Application.DtoModels
 			{
 				return false;
 			}
-			if (obj is BuyOrderResponse)
+			if (obj is BuyOrderResponse buyOrderResponse)
 			{
-				BuyOrderResponse buyOrderResponse = (BuyOrderResponse)obj;
-				return(BuyOrderID==buyOrderResponse.BuyOrderID &&
-					StockSymbol==buyOrderResponse.StockSymbol&&
-					StockName==buyOrderResponse.StockName&&
-					DateAndTimeOfOrder==buyOrderResponse.DateAndTimeOfOrder&&
-					Quantity==buyOrderResponse.Quantity &&
-					Price==buyOrderResponse.Price &&
-					TradeAmount==buyOrderResponse.TradeAmount
+				return (BuyOrderID == buyOrderResponse.BuyOrderID &&
+					StockSymbol == buyOrderResponse.StockSymbol &&
+					StockName == buyOrderResponse.StockName &&
+					DateAndTimeOfOrder == buyOrderResponse.DateAndTimeOfOrder &&
+					Quantity == buyOrderResponse.Quantity &&
+					Price == buyOrderResponse.Price &&
+					TradeAmount == buyOrderResponse.TradeAmount
 					);
 			}
 			return false;

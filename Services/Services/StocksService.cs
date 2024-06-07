@@ -24,7 +24,8 @@ namespace Application.Services
 
 			if (buyOrderRequest.Quantity == 0 || 
 				buyOrderRequest.Quantity > 100000 ||
-				buyOrderRequest.Price <= 0 ||
+				buyOrderRequest.Price <= 0 || 
+				buyOrderRequest.Price > 10000 ||
 				buyOrderRequest.StockSymbol is null ||
 				buyOrderRequest.DateAndTimeOfOrder < DateTime.Parse("2000-01-01")) 
 			{
@@ -44,6 +45,7 @@ namespace Application.Services
 			if (sellOrderRequest.Quantity == 0 ||
 				sellOrderRequest.Quantity > 100000 ||
 				sellOrderRequest.Price <= 0 ||
+				sellOrderRequest.Price > 10000 ||
 				sellOrderRequest.StockSymbol is null ||
 				sellOrderRequest.DateAndTimeOfOrder < DateTime.Parse("2000-01-01"))
 			{

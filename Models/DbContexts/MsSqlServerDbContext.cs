@@ -22,16 +22,15 @@ namespace Infrastructure.DbContexts
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			
 
-			modelBuilder.Entity<UserBuyOrder>().HasKey(ubo => new { ubo.UserId, ubo.BuyOrderId });
-			modelBuilder.Entity<UserSellOrder>().HasKey(ubo => new { ubo.UserId, ubo.SellOrderId });
+			modelBuilder.Entity<UserBuyOrder>().HasKey(userBuyOrder => new { userBuyOrder.UserId, userBuyOrder.BuyOrderId });
+			modelBuilder.Entity<UserSellOrder>().HasKey(userBuyOrder => new { userBuyOrder.UserId, userBuyOrder.SellOrderId });
 
-			modelBuilder.Entity<UserBuyOrder>().HasOne(ubo => ubo.User).WithMany(u=>u.UserBuyOrders).HasForeignKey(ubo => ubo.UserId);
-			modelBuilder.Entity<BuyOrder>().HasOne(bo => bo.UserBuyOrder).WithOne(ubo => ubo.BuyOrder).HasForeignKey<UserBuyOrder>(ubo=>ubo.BuyOrderId);
+			modelBuilder.Entity<UserBuyOrder>().HasOne(userBuyOrder => userBuyOrder.User).WithMany(u=>u.UserBuyOrders).HasForeignKey(userBuyOrder => userBuyOrder.UserId);
+			modelBuilder.Entity<BuyOrder>().HasOne(buyOrder => buyOrder.UserBuyOrder).WithOne(userBuyOrder => userBuyOrder.BuyOrder).HasForeignKey<UserBuyOrder>(userBuyOrder => userBuyOrder.BuyOrderId);
 
-			modelBuilder.Entity<UserSellOrder>().HasOne(uso => uso.User).WithMany(u => u.UserSellOrders).HasForeignKey(uso => uso.UserId);
-			modelBuilder.Entity<SellOrder>().HasOne(so => so.UserSellOrder).WithOne(uso => uso.SellOrder).HasForeignKey<UserSellOrder>(uso=>uso.SellOrderId);
+			modelBuilder.Entity<UserSellOrder>().HasOne(userSellOrder => userSellOrder.User).WithMany(user => user.UserSellOrders).HasForeignKey(userSellOrder => userSellOrder.UserId);
+			modelBuilder.Entity<SellOrder>().HasOne(sellOrder => sellOrder.UserSellOrder).WithOne(userSellOrder => userSellOrder.SellOrder).HasForeignKey<UserSellOrder>(userSellOrder => userSellOrder.SellOrderId);
 			
 			base.OnModelCreating(modelBuilder);
 

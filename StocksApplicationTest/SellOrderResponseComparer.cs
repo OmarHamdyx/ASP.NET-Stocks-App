@@ -1,7 +1,7 @@
 ﻿using Application.DtoModels;
 namespace StocksApplicationTest
 {
-	public class SellOrderResponseComparer : IEqualityComparer<SellOrderResponse>
+	public class SellOrderResponseComparer : IEqualityComparer<SellOrderResponse> 
 	{
 		public bool Equals(SellOrderResponse x, SellOrderResponse y)
 		{

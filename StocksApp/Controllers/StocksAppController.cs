@@ -147,14 +147,13 @@ namespace StocksApp.Controllers
             OrdersViewModel ordersViewModel = new OrdersViewModel();
             ordersViewModel.BuyOrders = await _stocksService.GetBuyOrdersAsync();
             ordersViewModel.SellOrders = await _stocksService.GetSellOrdersAsync();
-
             return new ViewAsPdf("OrdersPdf", ordersViewModel,ViewData)
             {
                 FileName = "Orders.pdf",
                 PageSize = Rotativa.AspNetCore.Options.Size.A4,
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
             };
-            return View("OrdersPdf", ordersViewModel);
+            //return View("OrdersPdf", ordersViewModel);
         }
     }
 }
