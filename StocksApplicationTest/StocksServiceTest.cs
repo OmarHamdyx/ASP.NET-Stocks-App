@@ -15,10 +15,10 @@ namespace StocksApplicationTest
 	public class StocksServiceTest
 	{
 		private readonly IStocksService _stocksService;
-		private readonly IConfiguration _configuration;
 		private readonly IFixture _fixture;
-		private readonly IStocksAppRepository _stocksAppRepository;
 		private readonly Mock<IStocksAppRepository> _stocksAppRepositoryMock;
+		//DbMock
+		private readonly IConfiguration _configuration;
 		private readonly DbContextMock<MsSqlServerDbContext> _dbContextMock;
 		private readonly MsSqlServerDbContext _dbContext;
 
@@ -47,8 +47,7 @@ namespace StocksApplicationTest
 			#region Repository Mock
 
 			_stocksAppRepositoryMock = new Mock<IStocksAppRepository>();
-			_stocksAppRepository = _stocksAppRepositoryMock.Object;
-			_stocksService = new StocksService(_stocksAppRepository);
+			_stocksService = new StocksService(_stocksAppRepositoryMock.Object);
 			_fixture = new Fixture();
 
 			#endregion
@@ -209,7 +208,7 @@ namespace StocksApplicationTest
 			SellOrder sellOrder = sellOrderRequest.ToSellOrder();
 			SellOrderResponse expectedSellOrderResponse = sellOrder.ToSellOrderResponse();
 
-			_stocksAppRepositoryMock.Setup(stocksService => stocksService.PostSellOrderAsync(It.IsAny<SellOrderRequest>())).ReturnsAsync(expectedSellOrderResponse);
+			_stocksAppRepositoryMock.Setup( stocksAppRepository => stocksAppRepository.PostSellOrderAsync(It.IsAny<SellOrderRequest>())).ReturnsAsync(expectedSellOrderResponse);
 
 			SellOrderResponse? actualSellOrderResponse = await _stocksService.CreateSellOrderAsync(sellOrderRequest);
 
@@ -241,7 +240,7 @@ namespace StocksApplicationTest
 		public async Task GetSellOrdersAsync_WhenSellOrdersListIsEmpty()
 		{
 			List<SellOrderResponse> expectedSellOrderResponses = new List<SellOrderResponse>();
-			_stocksAppRepositoryMock.Setup(stocksService => stocksService.GetSellOrdersAsync()).ReturnsAsync(expectedSellOrderResponses);
+			_stocksAppRepositoryMock.Setup(stocksAppRepositoryMock => stocksAppRepositoryMock.GetSellOrdersAsync()).ReturnsAsync(expectedSellOrderResponses);
 
 			List<SellOrderResponse?>? actualSellOrderResponses = await _stocksService.GetSellOrdersAsync();
 

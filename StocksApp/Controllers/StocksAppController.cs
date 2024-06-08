@@ -28,7 +28,7 @@ namespace StocksApp.Controllers
 
         [Route("")]
         [Route("[Action]")]
-        public async Task<IActionResult?> GetStockDetails(string? symbol, int? quantity, List<string?>? errors, bool? errorFlag)
+        public async Task<IActionResult?> GetStockDetails(string? symbol, int? quantity, List<string?>? errors)
         {
             ViewBag.ErrorMessages = errors;
             ViewBag.Token = _configuration["finnhubapikey"];
