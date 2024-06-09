@@ -95,7 +95,7 @@ namespace StocksApp.Controllers
             {
                 if (form.ContainsKey("BuyOrder"))
                 {
-
+                    
                     BuyOrderRequest buyOrderRequest = new()
                     {
                         StockName = stockDetailsViewModel.StockName,
@@ -153,7 +153,6 @@ namespace StocksApp.Controllers
                 PageSize = Rotativa.AspNetCore.Options.Size.A4,
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
             };
-            //return View("OrdersPdf", ordersViewModel);
         }
     }
 }
