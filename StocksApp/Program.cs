@@ -28,3 +28,5 @@ app.UseStaticFiles();
 app.MapControllers();
 app.UseRotativa();
 app.Run();
+public partial class Program { } //make the auto-generated Program accessible programmatically
+

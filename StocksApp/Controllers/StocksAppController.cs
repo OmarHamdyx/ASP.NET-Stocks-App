@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 namespace StocksApp.Controllers
 {
     [Controller]
+    [Route("[Controller]")]
     //Parent route
     public class StocksAppController : Controller
     {
@@ -25,9 +26,9 @@ namespace StocksApp.Controllers
             _stocksService = stocksService;
 			_currentStockDetails = currentStockDetails;
 		}
-
-        [Route("")]
-        [Route("[Action]")]
+        
+        [HttpGet("/")]
+        [HttpGet("[Action]")]
         public async Task<IActionResult?> GetStockDetails(string? symbol, int? quantity, List<string?>? errors)
         {
             ViewBag.ErrorMessages = errors;
@@ -81,8 +82,8 @@ namespace StocksApp.Controllers
 
 
         }
-
-        [HttpPost("[Action]")]
+		
+		[HttpPost("[Action]")]
         public async Task<IActionResult> PostOrder(StockDetailsViewModel? stockDetailsViewModel, IFormCollection? form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
         {
             if (!ModelState.IsValid)
@@ -128,7 +129,7 @@ namespace StocksApp.Controllers
             }
         }
 
-        [Route("[Action]")]
+        [HttpGet("[Action]")]
         public async Task<IActionResult?> GetOrders()
         {
 
@@ -141,7 +142,7 @@ namespace StocksApp.Controllers
 
             return View("Orders", ordersViewModel);
         }
-        [Route("[Action]")]
+        [HttpGet("[Action]")]
         public async Task<IActionResult> DownloadPdf()
         {
             OrdersViewModel ordersViewModel = new OrdersViewModel();
