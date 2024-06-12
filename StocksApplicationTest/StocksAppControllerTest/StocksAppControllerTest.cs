@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Moq;
 using Rotativa.AspNetCore;
@@ -32,16 +33,18 @@ namespace StocksApplicationTest.StocksAppControllerTest
 		private readonly Mock<IFormCollection> _formCollectionMock;
 		private readonly Mock <IConfiguration> _configurationMock;
 		private readonly ICurrentStockDetails _currentStockDetails;
+		private readonly Mock<IOptions<TradingOptions>> _tradingOptions;
 
 		public StocksAppControllerTest()
 		{
 			_configurationMock = new Mock<IConfiguration>();
 			_stocksServiceMock = new Mock<IStocksService>();
 			_finnhubServiceMock = new Mock<IFinnhubService>();
+			_tradingOptions = new Mock<IOptions<TradingOptions>>();
 			_currentStockDetails = new CurrentStockDetails();
 			_fixture = new Fixture();
 			_formCollectionMock = new Mock<IFormCollection>();
-			_stocksAppController = new StocksAppController(_configurationMock.Object, _finnhubServiceMock.Object, _stocksServiceMock.Object, _currentStockDetails);
+			_stocksAppController = new StocksAppController(_configurationMock.Object, _finnhubServiceMock.Object, _stocksServiceMock.Object, _currentStockDetails, _tradingOptions.Object);
 		}
 
 		[Fact]
@@ -53,7 +56,7 @@ namespace StocksApplicationTest.StocksAppControllerTest
 			_finnhubServiceMock.Setup(finnhubServiceMock => finnhubServiceMock.GetStockInfoAsync(It.IsAny<string>())).ReturnsAsync(stockModel);
 			_finnhubServiceMock.Setup(finnhubServiceMock => finnhubServiceMock.GetCompanyInfoAsync(It.IsAny<string>())).ReturnsAsync(companyModel);
 
-			IActionResult? actionResult = await _stocksAppController.GetStockDetails(null, null, null);
+			IActionResult? actionResult = await _stocksAppController.GetStockDetails(null, null);
 
 			ViewResult viewResult = Assert.IsType<ViewResult>(actionResult);
 
@@ -75,7 +78,7 @@ namespace StocksApplicationTest.StocksAppControllerTest
 			_finnhubServiceMock.Setup(finnhubServiceMock => finnhubServiceMock.GetStockInfoAsync(It.IsAny<string>())).ReturnsAsync(stockModel);
 			_finnhubServiceMock.Setup(finnhubServiceMock => finnhubServiceMock.GetCompanyInfoAsync(It.IsAny<string>())).ReturnsAsync(companyModel);
 
-			IActionResult? actionResult = await _stocksAppController.GetStockDetails("MSFT", null, null);
+			IActionResult? actionResult = await _stocksAppController.GetStockDetails("MSFT", null);
 
 			ViewResult viewResult = Assert.IsType<ViewResult>(actionResult);
 

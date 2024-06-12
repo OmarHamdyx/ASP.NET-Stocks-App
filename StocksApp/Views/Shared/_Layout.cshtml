@@ -3,8 +3,9 @@
 <head>
 	<title>@ViewBag.Title</title>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-	<link href="/css/tailwindoutput.css" rel="stylesheet" />
-	<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+@* 	<link href="/css/tailwindoutput.css" rel="stylesheet" />
+ *@ 	<script src="https://cdn.tailwindcss.com"></script>
+ 	<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
 	<script>
 		// On page load or when changing themes, best to add inline in `head` to avoid FOUC
 		if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -14,7 +15,7 @@
 		}
 	</script>
 </head>
-<body class="bg-gradient-to-l from-cyan-600 to-white dark:bg-gradient-to-r dark:from-sky-800 dark:to-cyan-500">
+<body class="bg-white dark:bg-gradient-to-br dark:from-sky-800 dark:to-cyan-500">
 	<div>
 		<div class="ml-10">
 			<div class="flex">
@@ -35,9 +36,8 @@
 									<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
 								</svg>
 							</div>
-							<input type="search" name="symbol" id="DefaultSearch" class="block w-full rounded-lg border border-gray-300 bg-white p-4 ps-10 text-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Stocks" required />
-							<input type="hidden" name="errorFlag" id="ErrorFlag" value="false" />
-							<button type="submit" class="absolute bottom-2.5 end-2.5 rounded-lg bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Search</button>
+							<input type="search" name="companySymbol" id="DefaultSearch" class="block w-full rounded-lg border border-black bg-white p-4 ps-10 text-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search Stocks" required />
+							<button type="submit" class="absolute bottom-2.5 end-2.5 rounded-lg bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-sky-600 dark:hover:bg-sky-700 dark:focus:ring-blue-800">Search</button>
 						</div>
 					</form>
 				</div>

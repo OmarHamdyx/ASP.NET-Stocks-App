@@ -9,6 +9,7 @@ using Rotativa.AspNetCore;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpClient();
 builder.Services.Configure<DefaultSymbolOption>(builder.Configuration.GetSection("DefaultSymbol"));
+builder.Services.Configure<TradingOptions>(builder.Configuration.GetSection("TradingOptions"));
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<MsSqlServerDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("MsSqlServerConnectionString")));
 builder.Services.AddScoped<IFinnhubService, FinnhubService>();

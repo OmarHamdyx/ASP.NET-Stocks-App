@@ -6,6 +6,7 @@ using Application.DtoModels;
 using System.Globalization;
 using Rotativa.AspNetCore;
 using System.Linq.Expressions;
+using Microsoft.Extensions.Options;
 namespace StocksApp.Controllers
 {
     [Controller]
@@ -18,35 +19,39 @@ namespace StocksApp.Controllers
         private readonly IFinnhubService _finhubbService;
         private readonly IStocksService _stocksService;
 		private readonly ICurrentStockDetails _currentStockDetails;
+		private readonly IOptions<TradingOptions> _tradingOptions;
 
-		public StocksAppController(IConfiguration configuration, IFinnhubService finhubbService, IStocksService stocksService,ICurrentStockDetails currentStockDetails)
+		public StocksAppController(IConfiguration configuration, IFinnhubService finhubbService, IStocksService stocksService,ICurrentStockDetails currentStockDetails,IOptions<TradingOptions> tradingOptions)
         {
             _configuration = configuration;
             _finhubbService = finhubbService;
             _stocksService = stocksService;
 			_currentStockDetails = currentStockDetails;
+			_tradingOptions = tradingOptions;
 		}
         
         [HttpGet("/")]
         [HttpGet("[Action]")]
-        public async Task<IActionResult?> GetStockDetails(string? symbol, int? quantity, List<string?>? errors)
+        [HttpGet("[Action]/{companySymbol}")]
+
+        public async Task<IActionResult?> GetStockDetails(string? companySymbol, List<string?>? errors, int quantity = 100)
         {
             ViewBag.ErrorMessages = errors;
             ViewBag.Token = _configuration["finnhubapikey"];
 
-            if (_currentStockDetails.ErrorFlag is true && symbol is null)
+            if (_currentStockDetails.ErrorFlag is true && companySymbol is null)
             {
                 return View("NoStockFoundError");
             }
-            if (symbol is not null || (_currentStockDetails.StockSymbol is null && symbol is null))
+            if (companySymbol is not null || (_currentStockDetails.StockSymbol is null && companySymbol is null))
             {
 				_currentStockDetails.ErrorFlag = false;
 				_currentStockDetails.SearchFlag = true;
             }
             if (_currentStockDetails.SearchFlag is true)
             {
-                StockModel? stockModel = await _finhubbService.GetStockInfoAsync(symbol);
-                CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(symbol);
+                StockModel? stockModel = await _finhubbService.GetStockInfoAsync(companySymbol);
+                CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(companySymbol);
                 _currentStockDetails.SearchFlag = false;
                 if (stockModel.C is 0 || companyInfo.Name is null || companyInfo.Ticker is null)
                 {
@@ -145,16 +150,54 @@ namespace StocksApp.Controllers
         [HttpGet("[Action]")]
         public async Task<IActionResult> DownloadPdf()
         {
-            OrdersViewModel ordersViewModel = new OrdersViewModel();
-            ordersViewModel.BuyOrders = await _stocksService.GetBuyOrdersAsync();
-            ordersViewModel.SellOrders = await _stocksService.GetSellOrdersAsync();
-            return new ViewAsPdf("OrdersPdf", ordersViewModel,ViewData)
+			OrdersViewModel ordersViewModel = new()
+			{
+				BuyOrders = await _stocksService.GetBuyOrdersAsync(),
+				SellOrders = await _stocksService.GetSellOrdersAsync()
+			};
+			return new ViewAsPdf("OrdersPdf", ordersViewModel,ViewData)
             {
                 FileName = "Orders.pdf",
                 PageSize = Rotativa.AspNetCore.Options.Size.A4,
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Portrait
             };
         }
-    }
+        [HttpGet("[Action]")]
+        public async Task<IActionResult> GetExplorePage() 
+        {
+            CompanyOptionsViewModel companyOptionsViewModel = new()
+            {   
+                CompanyNames = _tradingOptions.Value.CompanyNames.Split(',').ToList(),
+                CompanySymbols = _tradingOptions.Value.Top25PopularStocks.Split(',').ToList(),
+			};
+            return View("ExplorePage", companyOptionsViewModel);
+        }
+
+        [HttpGet("[Action]/{companySymbol}")]
+        public async Task<IActionResult> GetCompanyAndStockDetailsInExplore(string companySymbol) 
+        {
+
+			StockModel? stockModel = await _finhubbService.GetStockInfoAsync(companySymbol);
+			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(companySymbol);
+
+
+            CompanyAndStockDetails companyAndStockDetails = new() 
+            {
+				Quantity = (int)_tradingOptions.Value.DefaultOrderQuantity,
+				StockName = companyInfo.Name,
+				StockSymbol = companyInfo.Ticker,
+				Price = stockModel.C,
+                ImgUrl = companyInfo.Logo,
+                Exchange = companyInfo.Exchange,
+                FinnhubIndustry = companyInfo.FinnhubIndustry,
+			};
+
+            companyAndStockDetails.CompanyOptions.CompanyNames = _tradingOptions.Value.CompanyNames.Split(',').ToList();
+            companyAndStockDetails.CompanyOptions.CompanySymbols = _tradingOptions.Value.Top25PopularStocks.Split(',').ToList();
+
+
+              return View("CompanyAndStockDetailsInExplore", companyAndStockDetails);
+        }
+	}
 }
 
