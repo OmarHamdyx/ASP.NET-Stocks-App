@@ -5,6 +5,5 @@
 		public string? ImgUrl { get; set; }
 		public string? Exchange { get; set; }
 		public string? FinnhubIndustry { get; set;}
-		public CompanyOptionsViewModel? CompanyOptions { get; set; } = new CompanyOptionsViewModel();
 	}
 }
