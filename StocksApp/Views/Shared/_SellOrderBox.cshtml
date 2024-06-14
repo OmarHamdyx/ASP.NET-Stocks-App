@@ -1,10 +1,10 @@
 ﻿@model SellOrderResponse
 
-<div class="text-gray-800 font-bold dark:text-white">
+<div class="font-bold text-gray-800 dark:text-white">
 	<div class="text-[30px]">@Model.StockName (@Model.StockSymbol)</div>
 	<div>@Model.Quantity shares at @Model.Price.Value.ToString("0.00")</div>
 	<div>Trade Amount : @Model.TradeAmount.Value.ToString("0.00")</div>
 </div>
-<div class="text-black font-bold dark:text-white">@Model.DateAndTimeOfOrder.Value.ToString("dd MMMM yyyy hh:mm:ss tt")</div>
-<div class="my-2 border-b-black border"></div>
+<div class="font-bold text-black dark:text-white">@Model.DateAndTimeOfOrder.Value.ToString("dd MMMM yyyy hh:mm:ss tt")</div>
+<div class="my-2 border border-b-black"></div>
 

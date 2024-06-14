@@ -64,7 +64,7 @@ namespace StocksApplicationTest.StocksAppControllerTest
 
 			StockDetailsViewModel? stockDetailsViewModel = (StockDetailsViewModel?)viewResult.Model;
 
-			stockDetailsViewModel.StockName.Should().Be(companyModel.Name);
+			stockDetailsViewModel.CompanyName.Should().Be(companyModel.Name);
 
 			stockDetailsViewModel.StockSymbol.Should().Be(companyModel.Ticker);
 
@@ -86,7 +86,7 @@ namespace StocksApplicationTest.StocksAppControllerTest
 
 			StockDetailsViewModel? stockDetailsViewModel = (StockDetailsViewModel?)viewResult.Model;
 
-			stockDetailsViewModel.StockName.Should().Be(companyModel.Name);
+			stockDetailsViewModel.CompanyName.Should().Be(companyModel.Name);
 
 			stockDetailsViewModel.StockSymbol.Should().Be(companyModel.Ticker);
 

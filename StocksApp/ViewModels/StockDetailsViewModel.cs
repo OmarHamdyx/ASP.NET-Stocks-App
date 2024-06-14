@@ -8,9 +8,7 @@ namespace StocksApp.ViewModels
 		[Range(1, 100000, ErrorMessage = "Quantity must be between 1 and 100000")]
 		public int? Quantity { get; set; }
 		public string? StockSymbol { get; set; } 
-
-		public string? StockName { get; set; }
-
+		public string? CompanyName { get; set; }
 		public double? Price { get; set; }
 
 	}

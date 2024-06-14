@@ -32,26 +32,26 @@ namespace StocksApp.Controllers
         
         [HttpGet("/")]
         [HttpGet("[Action]")]
-        [HttpGet("[Action]/{companySymbol}")]
+        [HttpGet("[Action]/{stockSymbol}")]
 
-        public async Task<IActionResult?> GetStockDetails(string? companySymbol, List<string?>? errors, int quantity = 100)
+        public async Task<IActionResult?> GetStockDetails(string? stockSymbol, List<string?>? errors, int quantity = 100)
         {
             ViewBag.ErrorMessages = errors;
             ViewBag.Token = _configuration["finnhubapikey"];
 
-            if (_currentStockDetails.ErrorFlag is true && companySymbol is null)
+            if (_currentStockDetails.ErrorFlag is true && stockSymbol is null)
             {
                 return View("NoStockFoundError");
             }
-            if (companySymbol is not null || (_currentStockDetails.StockSymbol is null && companySymbol is null))
+            if (stockSymbol is not null || (_currentStockDetails.StockSymbol is null && stockSymbol is null))
             {
 				_currentStockDetails.ErrorFlag = false;
 				_currentStockDetails.SearchFlag = true;
             }
             if (_currentStockDetails.SearchFlag is true)
             {
-                StockModel? stockModel = await _finhubbService.GetStockInfoAsync(companySymbol);
-                CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(companySymbol);
+                StockModel? stockModel = await _finhubbService.GetStockInfoAsync(stockSymbol);
+                CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(stockSymbol);
                 _currentStockDetails.SearchFlag = false;
                 if (stockModel.C is 0 || companyInfo.Name is null || companyInfo.Ticker is null)
                 {
@@ -61,7 +61,7 @@ namespace StocksApp.Controllers
                 StockDetailsViewModel? StockDetailsViewModel = new StockDetailsViewModel()
                 {
                     Quantity = quantity,
-                    StockName = companyInfo.Name,
+                    CompanyName = companyInfo.Name,
                     StockSymbol = companyInfo.Ticker,
                     Price = stockModel.C
 
@@ -77,7 +77,7 @@ namespace StocksApp.Controllers
             StockDetailsViewModel? currentSockDetailsViewModel = new StockDetailsViewModel()
             {
                 Quantity = _currentStockDetails.Quantity,
-                StockName = _currentStockDetails.StockName,
+                CompanyName = _currentStockDetails.StockName,
                 StockSymbol = _currentStockDetails.StockSymbol,
                 Price = _currentStockDetails.Price
             };
@@ -104,7 +104,7 @@ namespace StocksApp.Controllers
                     
                     BuyOrderRequest buyOrderRequest = new()
                     {
-                        StockName = stockDetailsViewModel.StockName,
+                        StockName = stockDetailsViewModel.CompanyName,
                         StockSymbol = stockDetailsViewModel.StockSymbol,
                         DateAndTimeOfOrder = DateTime.Now,
                         Quantity = (uint)stockDetailsViewModel.Quantity,
@@ -120,7 +120,7 @@ namespace StocksApp.Controllers
 
                     SellOrderRequest sellOrderRequest = new()
                     {
-                        StockName = stockDetailsViewModel.StockName,
+                        StockName = stockDetailsViewModel.CompanyName,
                         StockSymbol = stockDetailsViewModel.StockSymbol,
                         DateAndTimeOfOrder = DateTime.Now,
                         Quantity = (uint)stockDetailsViewModel.Quantity,
@@ -165,38 +165,25 @@ namespace StocksApp.Controllers
         [HttpGet("[Action]")]
         public async Task<IActionResult> GetExplorePage() 
         {
-            CompanyOptionsViewModel companyOptionsViewModel = new()
+			CompanyOptionsViewModel companyOptionsViewModel = new()
             {   
                 CompanyNames = _tradingOptions.Value.CompanyNames.Split(',').ToList(),
-                CompanySymbols = _tradingOptions.Value.Top25PopularStocks.Split(',').ToList(),
+                StockSymbols = _tradingOptions.Value.Top25PopularStocks.Split(',').ToList(),
 			};
             return View("ExplorePage", companyOptionsViewModel);
         }
 
-        [HttpGet("[Action]/{companySymbol}")]
-        public async Task<IActionResult> GetCompanyAndStockDetailsInExplore(string companySymbol) 
+        [HttpGet("[Action]/{stockSymbol}")]
+        public async Task<IActionResult> GetCompanyAndStockDetailsInExplore(string? stockSymbol) 
         {
+			ViewBag.StockSymbol = stockSymbol;
 
-			StockModel? stockModel = await _finhubbService.GetStockInfoAsync(companySymbol);
-			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(companySymbol);
-
-
-            CompanyAndStockDetails companyAndStockDetails = new() 
-            {
-				Quantity = (int)_tradingOptions.Value.DefaultOrderQuantity,
-				StockName = companyInfo.Name,
-				StockSymbol = companyInfo.Ticker,
-				Price = stockModel.C,
-                ImgUrl = companyInfo.Logo,
-                Exchange = companyInfo.Exchange,
-                FinnhubIndustry = companyInfo.FinnhubIndustry,
+			CompanyOptionsViewModel companyOptionsViewModel = new()
+			{
+				CompanyNames = _tradingOptions.Value.CompanyNames.Split(',').ToList(),
+				StockSymbols = _tradingOptions.Value.Top25PopularStocks.Split(',').ToList(),
 			};
-
-            companyAndStockDetails.CompanyOptions.CompanyNames = _tradingOptions.Value.CompanyNames.Split(',').ToList();
-            companyAndStockDetails.CompanyOptions.CompanySymbols = _tradingOptions.Value.Top25PopularStocks.Split(',').ToList();
-
-
-              return View("CompanyAndStockDetailsInExplore", companyAndStockDetails);
+			return View("ExplorePage", companyOptionsViewModel);
         }
 	}
 }
