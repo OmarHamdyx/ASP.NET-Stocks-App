@@ -9,10 +9,13 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Moq;
 using Rotativa.AspNetCore;
+using Serilog;
+using Serilog.Extensions.Hosting;
 using StocksApp.Controllers;
 using StocksApp.ViewModels;
 using System;
@@ -34,6 +37,8 @@ namespace StocksApplicationTest.StocksAppControllerTest
 		private readonly Mock <IConfiguration> _configurationMock;
 		private readonly ICurrentStockDetails _currentStockDetails;
 		private readonly Mock<IOptions<TradingOptions>> _tradingOptions;
+		private readonly Mock<ILogger<StocksAppController>> _logger;
+		private readonly Mock<IDiagnosticContext> _diagnosticContext;
 
 		public StocksAppControllerTest()
 		{
@@ -43,8 +48,10 @@ namespace StocksApplicationTest.StocksAppControllerTest
 			_tradingOptions = new Mock<IOptions<TradingOptions>>();
 			_currentStockDetails = new CurrentStockDetails();
 			_fixture = new Fixture();
+			_logger = new Mock<ILogger<StocksAppController>>();
+			_diagnosticContext = new Mock<IDiagnosticContext>();
 			_formCollectionMock = new Mock<IFormCollection>();
-			_stocksAppController = new StocksAppController(_configurationMock.Object, _finnhubServiceMock.Object, _stocksServiceMock.Object, _currentStockDetails, _tradingOptions.Object);
+			_stocksAppController = new StocksAppController(_configurationMock.Object, _finnhubServiceMock.Object, _stocksServiceMock.Object, _currentStockDetails, _tradingOptions.Object, _logger.Object, _diagnosticContext.Object);
 		}
 
 		[Fact]
