@@ -11,5 +11,9 @@ namespace StocksApp.ViewModels
 		public string? CompanyName { get; set; }
 		public double? Price { get; set; }
 
+		public override string ToString()
+		{
+			return $"StockDetailsViewModel [Quantity={Quantity}, StockSymbol={StockSymbol}, CompanyName={CompanyName}, Price={Price}]";
+		}
 	}
 }
