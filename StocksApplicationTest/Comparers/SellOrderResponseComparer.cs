@@ -1,5 +1,5 @@
 ﻿using Application.DtoModels;
-namespace StocksApplicationTest.Compaeres
+namespace StocksApplicationTest.Comparers
 {
     public class SellOrderResponseComparer : IEqualityComparer<SellOrderResponse>
     {

@@ -1,14 +1,9 @@
 ﻿using FluentAssertions;
 using HtmlAgilityPack;
 using StocksApplicationTest.Factories;
-using System.Collections.Generic;
-using System.Net.Http;
-using System.Threading.Tasks;
-using Xunit;
 using AutoFixture;
 using Application.DtoModels;
 using Moq;
-using Application.Interfaces;
 
 namespace StocksApplicationTest.IntegrationTests
 {
@@ -23,7 +18,7 @@ namespace StocksApplicationTest.IntegrationTests
 		{
 			_factory = factory;
 			_client = factory.CreateClient();
-			_fixture = new Fixture();
+			_fixture = new Fixture();	
 		}
 
 		[Fact]
@@ -49,9 +44,8 @@ namespace StocksApplicationTest.IntegrationTests
 
 			HtmlDocument html = new HtmlDocument();
 			html.LoadHtml(responseBody);
-			var document = html.DocumentNode;
-
-			var ordersDiv = document.SelectSingleNode("//div[contains(@class, 'orders')]");
+			HtmlNode document = html.DocumentNode;
+			HtmlNode ordersDiv = document.SelectSingleNode("//div[contains(@class, 'orders')]");
 			ordersDiv.Should().NotBeNull();
 		}
 	}
