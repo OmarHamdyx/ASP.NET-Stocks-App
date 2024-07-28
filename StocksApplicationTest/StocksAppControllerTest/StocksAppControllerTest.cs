@@ -144,11 +144,6 @@ namespace StocksApplicationTest.StocksAppControllerTest
 		{
 			StockDetailsViewModel stockDetailsViewModel = _fixture.Create<StockDetailsViewModel>();
 
-			var keyValuePairs = new Dictionary<string, StringValues>
-									{
-										{ "BuyOrder", "buy-order-button" },
-									};
-
 			_formCollectionMock.Setup(formCollection => formCollection.ContainsKey("SellOrder")).Returns(true);
 
 			IActionResult actionResult = await _stocksAppController.PostOrder(stockDetailsViewModel, _formCollectionMock.Object);
@@ -156,7 +151,7 @@ namespace StocksApplicationTest.StocksAppControllerTest
 			RedirectToActionResult redirectToActionResult = Assert.IsType<RedirectToActionResult>(actionResult);
 
 			redirectToActionResult.ActionName.Should().Be("GetStockDetails");
-
+			redirectToActionResult.RouteValues.Should().ContainKey("StockDetailsViewModel");
 			redirectToActionResult.RouteValues["StockDetailsViewModel"].Should().BeOfType<StockDetailsViewModel>();
 
 		}

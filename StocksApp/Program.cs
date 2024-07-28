@@ -47,11 +47,11 @@ if (builder.Environment.IsDevelopment())
 	app.UseDeveloperExceptionPage();
 }
 
-app.UseRouting();
 app.UseStaticFiles();
 app.MapControllers();
 app.UseRotativa();
 app.UseSerilogRequestLogging();
 app.Run();
+
 public partial class Program { } //make the auto-generated Program accessible programmatically from any project
 
