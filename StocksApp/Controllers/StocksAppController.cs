@@ -7,6 +7,7 @@ using Rotativa.AspNetCore;
 using Microsoft.Extensions.Options;
 using Serilog;
 using SerilogTimings;
+using StocksApp.Factories;
 namespace StocksApp.Controllers
 {
 	[Controller]
@@ -37,7 +38,7 @@ namespace StocksApp.Controllers
 		[HttpGet("[Action]")]
 		[HttpGet("[Action]/{stockSymbol}")]
 
-		public async Task<IActionResult?> GetStockDetails(string? stockSymbol, List<string?>? errors, int quantity = 100)
+		public async Task<IActionResult?> GetStockDetails(string? stockSymbol, List<string?>? errors, int quantity)
 		{
 			_logger.LogInformation("Called GetStockDetails");
 
@@ -59,35 +60,35 @@ namespace StocksApp.Controllers
 				{
 					StockModel? stockModel = await _finhubbService.GetStockInfoAsync(stockSymbol);
 					CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(stockSymbol);
-				
-				_currentStockDetails.SearchFlag = false;
-				if (stockModel.C is 0 || companyInfo.Name is null || companyInfo.Ticker is null)
-				{
-					_currentStockDetails.ErrorFlag = true;
-					return View("NoStockFoundError");
-				}
-				StockDetailsViewModel? stockDetailsViewModel = new StockDetailsViewModel()
-				{
-					Quantity = quantity,
-					CompanyName = companyInfo.Name,
-					StockSymbol = companyInfo.Ticker,
-					Price = stockModel.C
 
-				};
+					_currentStockDetails.SearchFlag = false;
+					if (stockModel.C is 0 || companyInfo.Name is null || companyInfo.Ticker is null)
+					{
+						_currentStockDetails.ErrorFlag = true;
+						return View("NoStockFoundError");
+					}
+					StockDetailsViewModel? stockDetailsViewModel = new StockDetailsViewModel()
+					{
+						Quantity = quantity,
+						CompanyName = companyInfo.Name,
+						StockSymbol = companyInfo.Ticker,
+						Price = stockModel.C
 
-				_currentStockDetails.Quantity = quantity;
-				_currentStockDetails.StockName = companyInfo.Name;
-				_currentStockDetails.StockSymbol = companyInfo.Ticker;
-				_currentStockDetails.Price = stockModel.C;
+					};
 
-				_diagnosticContext.Set("Stock Details", stockDetailsViewModel);
+					_currentStockDetails.Quantity = quantity;
+					_currentStockDetails.StockName = companyInfo.Name;
+					_currentStockDetails.StockSymbol = companyInfo.Ticker;
+					_currentStockDetails.Price = stockModel.C;
 
-				return View("StockDetails", stockDetailsViewModel);
+					_diagnosticContext.Set("Stock Details", stockDetailsViewModel);
+
+					return View("StockDetails", stockDetailsViewModel);
 				}
 			}
 			StockDetailsViewModel? currentSockDetailsViewModel = new StockDetailsViewModel()
 			{
-				Quantity = _currentStockDetails.Quantity,
+				Quantity = quantity,
 				CompanyName = _currentStockDetails.StockName,
 				StockSymbol = _currentStockDetails.StockSymbol,
 				Price = _currentStockDetails.Price
@@ -100,51 +101,44 @@ namespace StocksApp.Controllers
 		}
 
 		[HttpPost("[Action]")]
+		[OrderFilterFactory(order: 2)]
 		public async Task<IActionResult> PostOrder(StockDetailsViewModel? stockDetailsViewModel, IFormCollection? form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
 		{
 			_logger.LogInformation("Called PostOrder");
 
-			if (!ModelState.IsValid)
+			if (form.ContainsKey("BuyOrder"))
 			{
-				List<string> errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
 
-				return RedirectToAction("GetStockDetails", new { Errors = errors });
+				BuyOrderRequest buyOrderRequest = new()
+				{
+					StockName = stockDetailsViewModel.CompanyName,
+					StockSymbol = stockDetailsViewModel.StockSymbol,
+					DateAndTimeOfOrder = DateTime.Now,
+					Quantity = (uint)stockDetailsViewModel.Quantity,
+					Price = stockDetailsViewModel.Price,
+				};
+
+				await _stocksService.CreateBuyOrderAsync(buyOrderRequest);
+
 			}
-			else
+			else if (form.ContainsKey("SellOrder"))
 			{
-				if (form.ContainsKey("BuyOrder"))
+
+
+				SellOrderRequest sellOrderRequest = new()
 				{
+					StockName = stockDetailsViewModel.CompanyName,
+					StockSymbol = stockDetailsViewModel.StockSymbol,
+					DateAndTimeOfOrder = DateTime.Now,
+					Quantity = (uint)stockDetailsViewModel.Quantity,
+					Price = stockDetailsViewModel.Price,
+				};
 
-					BuyOrderRequest buyOrderRequest = new()
-					{
-						StockName = stockDetailsViewModel.CompanyName,
-						StockSymbol = stockDetailsViewModel.StockSymbol,
-						DateAndTimeOfOrder = DateTime.Now,
-						Quantity = (uint)stockDetailsViewModel.Quantity,
-						Price = stockDetailsViewModel.Price,
-					};
+				await _stocksService.CreateSellOrderAsync(sellOrderRequest);
 
-					await _stocksService.CreateBuyOrderAsync(buyOrderRequest);
-
-				}
-				else if (form.ContainsKey("SellOrder"))
-				{
-
-
-					SellOrderRequest sellOrderRequest = new()
-					{
-						StockName = stockDetailsViewModel.CompanyName,
-						StockSymbol = stockDetailsViewModel.StockSymbol,
-						DateAndTimeOfOrder = DateTime.Now,
-						Quantity = (uint)stockDetailsViewModel.Quantity,
-						Price = stockDetailsViewModel.Price,
-					};
-
-					await _stocksService.CreateSellOrderAsync(sellOrderRequest);
-
-				}
-				return RedirectToAction("GetStockDetails", new { StockDetailsViewModel = stockDetailsViewModel });
 			}
+			return RedirectToAction("GetStockDetails", new { Quantity = (int)stockDetailsViewModel.Quantity });
+
 		}
 
 		[HttpGet("[Action]")]

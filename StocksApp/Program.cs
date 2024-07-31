@@ -7,6 +7,8 @@ using Infrastructure.Repositories;
 using Rotativa.AspNetCore;
 using Microsoft.AspNetCore.HttpLogging;
 using Serilog;
+using StocksApp.Factories;
+using StocksApp.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,8 @@ builder.Services.AddDbContext<MsSqlServerDbContext>(options => options.UseSqlSer
 builder.Services.AddScoped<IFinnhubService, FinnhubService>();
 builder.Services.AddScoped<IStocksService, StocksService>();
 builder.Services.AddScoped<IStocksAppRepository, StocksAppRepository>();
-builder.Services.AddSingleton<ICurrentStockDetails,CurrentStockDetails>(); 
+builder.Services.AddSingleton<ICurrentStockDetails,CurrentStockDetails>();
+builder.Services.AddTransient<OrderFilter>();
 builder.Services.AddHttpLogging(options =>
 {
 	options.LoggingFields = HttpLoggingFields.RequestPropertiesAndHeaders | HttpLoggingFields.ResponsePropertiesAndHeaders;
