@@ -36,14 +36,11 @@ namespace StocksApp.Controllers
 
 		[HttpGet("/")]
 		[HttpGet("[Action]")]
-		[HttpGet("[Action]/{stockSymbol}")]
-
-		public async Task<IActionResult?> GetStockDetails(string? stockSymbol, List<string?>? errors, int quantity)
+		//[HttpGet("[Action]/{stockSymbol}")]
+		[GetStockDetailsFilterFactory(1)]
+		[LoggerFilterFactory(1, "Called GetStockDetails")]
+		public async Task<IActionResult?> GetStockDetails(string? stockSymbol, List<string?>? errors, int quantity = 100)
 		{
-			_logger.LogInformation("Called GetStockDetails");
-
-			ViewBag.ErrorMessages = errors;
-			ViewBag.Token = _configuration["finnhubapikey"];
 
 			if (_currentStockDetails.ErrorFlag is true && stockSymbol is null)
 			{
@@ -88,7 +85,7 @@ namespace StocksApp.Controllers
 			}
 			StockDetailsViewModel? currentSockDetailsViewModel = new StockDetailsViewModel()
 			{
-				Quantity = quantity,
+				Quantity = _currentStockDetails.Quantity,
 				CompanyName = _currentStockDetails.StockName,
 				StockSymbol = _currentStockDetails.StockSymbol,
 				Price = _currentStockDetails.Price
@@ -101,10 +98,11 @@ namespace StocksApp.Controllers
 		}
 
 		[HttpPost("[Action]")]
-		[OrderFilterFactory(order: 2)]
+		[OrderFilterFactory(2)]
+		[LoggerFilterFactory(1, "Called PostOrder")]
+
 		public async Task<IActionResult> PostOrder(StockDetailsViewModel? stockDetailsViewModel, IFormCollection? form) //IFormCollection? form to collect every possible input in a form and store it in a key-value pair
 		{
-			_logger.LogInformation("Called PostOrder");
 
 			if (form.ContainsKey("BuyOrder"))
 			{
@@ -137,14 +135,16 @@ namespace StocksApp.Controllers
 				await _stocksService.CreateSellOrderAsync(sellOrderRequest);
 
 			}
+			_currentStockDetails.Quantity = stockDetailsViewModel.Quantity;
 			return RedirectToAction("GetStockDetails", new { Quantity = (int)stockDetailsViewModel.Quantity });
 
 		}
 
 		[HttpGet("[Action]")]
+		[LoggerFilterFactory(1, "Called GetOrders")]
+
 		public async Task<IActionResult?> GetOrders()
 		{
-			_logger.LogInformation("Called GetOrders");
 
 			OrdersViewModel ordersViewModel = new OrdersViewModel()
 			{
@@ -156,9 +156,10 @@ namespace StocksApp.Controllers
 			return View("Orders", ordersViewModel);
 		}
 		[HttpGet("[Action]")]
+		[LoggerFilterFactory(1, "Called DownladPdf")]
+
 		public async Task<IActionResult> DownloadPdf()
 		{
-			_logger.LogInformation("Called DownladPdf");
 
 			OrdersViewModel ordersViewModel = new()
 			{
@@ -173,9 +174,10 @@ namespace StocksApp.Controllers
 			};
 		}
 		[HttpGet("[Action]")]
+		[LoggerFilterFactory(1, "Called GetExplorePage")]
+
 		public async Task<IActionResult> GetExplorePage()
 		{
-			_logger.LogInformation("Called GetExplorePage");
 
 			CompanyOptionsViewModel companyOptionsViewModel = new()
 			{
@@ -186,9 +188,10 @@ namespace StocksApp.Controllers
 		}
 
 		[HttpGet("[Action]/{stockSymbol}")]
+		[LoggerFilterFactory(1, "Called GetCompanyAndStockDetailsInExplore")]
+
 		public async Task<IActionResult> GetCompanyAndStockDetailsInExplore(string? stockSymbol)
 		{
-			_logger.LogInformation("Called GetCompanyAndStockDetailsInExplore");
 
 			ViewBag.StockSymbol = stockSymbol;
 

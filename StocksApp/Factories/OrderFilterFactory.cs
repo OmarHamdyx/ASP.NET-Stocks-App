@@ -7,7 +7,7 @@ namespace StocksApp.Factories
     {
         private readonly int _order;
 
-        private OrderFilter? _filter;
+        private OrderFilter? _orderFilter;
 
         public OrderFilterFactory(int order)
         {
@@ -18,9 +18,9 @@ namespace StocksApp.Factories
 
         public IFilterMetadata CreateInstance(IServiceProvider serviceProvider)
         {
-            _filter = serviceProvider.GetRequiredService<OrderFilter>();
-            _filter.Order = _order;
-            return _filter;
+            _orderFilter = serviceProvider.GetRequiredService<OrderFilter>();
+			_orderFilter.Order = _order;
+            return _orderFilter;
         }
     }
     
