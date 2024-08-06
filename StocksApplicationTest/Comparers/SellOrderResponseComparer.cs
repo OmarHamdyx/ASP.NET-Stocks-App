@@ -3,7 +3,7 @@ namespace StocksApplicationTest.Comparers
 {
     public class SellOrderResponseComparer : IEqualityComparer<SellOrderResponse>
     {
-        public bool Equals(SellOrderResponse x, SellOrderResponse y)
+        public bool Equals(SellOrderResponse? x, SellOrderResponse? y)
         {
             if (x == null || y == null) return false;
 
@@ -11,7 +11,7 @@ namespace StocksApplicationTest.Comparers
                    x.StockName == y.StockName &&
                    x.StockSymbol == y.StockSymbol &&
                    x.Quantity == y.Quantity &&
-                   x.Price == y.Price &&
+                   x.Price == y.Price && x.DateAndTimeOfOrder is not null && y.DateAndTimeOfOrder is not null &&
                    AreDateTimesEqual((DateTime)x.DateAndTimeOfOrder, (DateTime)y.DateAndTimeOfOrder);
         }
 

@@ -23,7 +23,7 @@
 	</a>
 	<div class="my-5 text-2xl text-gray-600 dark:text-white">Stocks <span class="text-3xl">▸ </span>Orders</div>
 
-	@if (Model.SellOrders.Count == 0 && Model.BuyOrders.Count == 0)
+	@if (Model.SellOrders is null && Model.BuyOrders is null )
 	{
 		<div class="text-[3rem] block max-w-fit rounded-lg p-6 text-gray-800 dark:text-white">
 			No Orders Yet
@@ -33,7 +33,7 @@
 	{
 		<div class="orders pb-[10rem] flex">
 			<div>
-				@if (Model.BuyOrders.Count != 0)
+				@if (Model.BuyOrders is not null)
 				{
 					<div class="w-[30rem] block rounded-lg border border-gray-500 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
 						<p class="font-bold text-gray-500">Buy Orders</p>
@@ -54,7 +54,7 @@
 			</div>
 
 			<div class="ml-10">
-				@if (Model.SellOrders.Count != 0)
+				@if (Model.SellOrders is not null)
 				{
 					<div class="w-[30rem] block rounded-lg border border-gray-500 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
 						<p class="font-bold text-gray-500">Sell Orders</p>

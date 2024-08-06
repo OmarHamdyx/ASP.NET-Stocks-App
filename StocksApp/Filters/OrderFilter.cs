@@ -16,7 +16,7 @@ namespace StocksApp.Filters
 			// Check if the controller is TradeController
 			if (context.Controller is StocksAppController)
 			{
-				StockDetailsViewModel stockDetailsViewModel = context.ActionArguments.Values.FirstOrDefault(arg => arg is StockDetailsViewModel) as StockDetailsViewModel;
+				StockDetailsViewModel? stockDetailsViewModel = context.ActionArguments.Values.FirstOrDefault(arg => arg is StockDetailsViewModel) as StockDetailsViewModel;
 				if (stockDetailsViewModel != null)
 				{
 					// Perform model-level validations

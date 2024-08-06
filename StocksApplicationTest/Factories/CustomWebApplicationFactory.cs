@@ -10,7 +10,7 @@ namespace StocksApplicationTest.Factories
 {
 	public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 	{
-		public Mock<IStocksService> StocksServiceMock { get; private set; }
+		public Mock<IStocksService>? StocksServiceMock { get; private set; }
 
 		protected override void ConfigureWebHost(IWebHostBuilder builder)
 		{

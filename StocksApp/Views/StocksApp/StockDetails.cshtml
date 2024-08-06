@@ -1,54 +1,57 @@
 ﻿@model StockDetailsViewModel
 
 @{
-	ViewBag.Title = "Home Page";
+    ViewBag.Title = "Home Page";
 }
 <div class="relative min-h-screen">
-	<div class="mt-72 font-bold">
-		<ul class="flex text-3xl">
-			<li class="mr-6">
-				<a asp-controller="StocksApp" asp-action="GetStockDetails" class="underline-offset-4 text-gray-800 underline hover:text-blue-800 dark:text-white">Trade</a>
-			</li>
-			<li class="mr-6">
-				<a asp-controller="StocksApp" asp-action="GetOrders" class="text-gray-800 hover:text-blue-800 dark:text-white">Orders</a>
-			</li>
-			<li class="mr-6">
-				<a asp-controller="StocksApp" asp-action="GetExplorePage" class="text-gray-800 hover:text-blue-800 dark:text-white">Explore</a>
-			</li>
-		</ul>
-	</div>
-	<div class="my-5 text-2xl text-gray-600 dark:text-white">Stocks <span class="text-3xl">▸</span> @Model.CompanyName</div>
-	<div class="animate-fade-left mt-5">
-		<div class="block max-w-fit rounded-lg border border-gray-500 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
-			<div class="flex">
-				<div>
-					<h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">@Model.CompanyName (@Model.StockSymbol)</h5>
-					<p class="text-7xl font-normal text-gray-700 dark:text-gray-400">$<span class="price">@Model.Price.Value.ToString("N")</span></p>
-				</div>
-				<div class="border-l-2 ml-5 h-auto border-white"></div>
-				<div class="ml-5">
-					<p class="text-2xl font-bold text-gray-500">New Order</p>
-					<form asp-controller="StocksApp" asp-action="PostOrder" method="post" class="mx-auto max-w-sm">
-						<label asp-for="Quantity" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
-						<input asp-for="Quantity" placeholder="99999" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-						<div>
-							<span asp-validation-for="Quantity" class="text-l text-red-500 dark:text-red-500"></span>
-						</div>
-						<input type="hidden" asp-for="StockSymbol" />
-						<input type="hidden" asp-for="CompanyName" />
-						<input type="hidden" asp-for="Price" />
-						<button type="submit" name="BuyOrder" value="buy-order-button" class="mb-3 me-2 mt-3 rounded-full bg-green-700 px-5 py-2.5 text-center text-sm font-medium text-white transition delay-150 duration-300 ease-in-out hover:bg-green-800 hover:-translate-y-1 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Buy</button>
-						<button type="submit" name="SellOrder" value="sell-order-button" class="mb-3 me-2 mt-3 rounded-full bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white transition delay-150 duration-300 ease-in-out hover:bg-red-800 hover:-translate-y-1 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Sell</button>
-					</form>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="mt-72 font-bold">
+        <ul class="flex text-3xl">
+            <li class="mr-6">
+                <a asp-controller="StocksApp" asp-action="GetStockDetails" class="underline-offset-4 text-gray-800 underline hover:text-blue-800 dark:text-white">Trade</a>
+            </li>
+            <li class="mr-6">
+                <a asp-controller="StocksApp" asp-action="GetOrders" class="text-gray-800 hover:text-blue-800 dark:text-white">Orders</a>
+            </li>
+            <li class="mr-6">
+                <a asp-controller="StocksApp" asp-action="GetExplorePage" class="text-gray-800 hover:text-blue-800 dark:text-white">Explore</a>
+            </li>
+        </ul>
+    </div>
+    <div class="my-5 text-2xl text-gray-600 dark:text-white">Stocks <span class="text-3xl">▸</span> @Model.CompanyName</div>
+    <div class="animate-fade-left mt-5">
+        <div class="block max-w-fit rounded-lg border border-gray-500 bg-white p-6 shadow dark:bg-gray-800 dark:border-gray-700">
+            <div class="flex">
+                <div>
+                    <h5 class="mb-2 text-3xl font-bold tracking-tight text-gray-900 dark:text-white">@Model.CompanyName (@Model.StockSymbol)</h5>
+                    @if (Model.Price is not null)
+                    {
+                        <p class="text-7xl font-normal text-gray-700 dark:text-gray-400">$<span class="price">@Model.Price.Value.ToString("N")</span></p>
+                    }
+                </div>
+                <div class="border-l-2 ml-5 h-auto border-white"></div>
+                <div class="ml-5">
+                    <p class="text-2xl font-bold text-gray-500">New Order</p>
+                    <form asp-controller="StocksApp" asp-action="PostOrder" method="post" class="mx-auto max-w-sm">
+                        <label asp-for="Quantity" class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">Quantity</label>
+                        <input asp-for="Quantity" placeholder="99999" class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                        <div>
+                            <span asp-validation-for="Quantity" class="text-l text-red-500 dark:text-red-500"></span>
+                        </div>
+                        <input type="hidden" asp-for="StockSymbol" />
+                        <input type="hidden" asp-for="CompanyName" />
+                        <input type="hidden" asp-for="Price" />
+                        <button type="submit" name="BuyOrder" value="buy-order-button" class="mb-3 me-2 mt-3 rounded-full bg-green-700 px-5 py-2.5 text-center text-sm font-medium text-white transition delay-150 duration-300 ease-in-out hover:bg-green-800 hover:-translate-y-1 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">Buy</button>
+                        <button type="submit" name="SellOrder" value="sell-order-button" class="mb-3 me-2 mt-3 rounded-full bg-red-700 px-5 py-2.5 text-center text-sm font-medium text-white transition delay-150 duration-300 ease-in-out hover:bg-red-800 hover:-translate-y-1 hover:scale-110 focus:outline-none focus:ring-4 focus:ring-red-300 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">Sell</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<input type="hidden" id="FinnhubToken" value=@ViewBag.FinnhubToken/>
- @section Scripts {
-	<script src="/Scripts/GetStockDetailsScript.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" asp-fallback-test="window.jQuery" asp-fallback-src="/Scripts/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.4/jquery.validate.min.js" asp-fallback-test="window.jQuery.validator" asp-fallback-src="/Scripts/jquery.validate.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" asp-fallback-test="window.jQuery.validator.unobstrusive" asp-fallback-src="/Scripts/jquery.validate.unobtrusive.min.js"></script>
-} 
+<input type="hidden" id="FinnhubToken" value=@ViewBag.FinnhubToken />
+@section Scripts {
+    <script src="/Scripts/GetStockDetailsScript.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" asp-fallback-test="window.jQuery" asp-fallback-src="/Scripts/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.4/jquery.validate.min.js" asp-fallback-test="window.jQuery.validator" asp-fallback-src="/Scripts/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" asp-fallback-test="window.jQuery.validator.unobstrusive" asp-fallback-src="/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
