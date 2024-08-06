@@ -16,14 +16,14 @@ namespace StocksApp.ViewComponents
 			_finhubbService = finhubbService;
 			_tradingOptions = tradingOptions;
 		}
-		public async Task<IViewComponentResult> InvokeAsync(string stockSymbol)
+		public async Task<IViewComponentResult?> InvokeAsync(string stockSymbol)
 		{
 
 			StockModel? stockInfo = await _finhubbService.GetStockInfoAsync(stockSymbol);
 			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(stockSymbol);
 
-
-			CompanyAndStockDetails companyAndStockDetails = new()
+			if (companyInfo is not null && stockInfo is not null)
+			{CompanyAndStockDetails companyAndStockDetails = new()
 			{
 				Quantity = (int)_tradingOptions.Value.DefaultOrderQuantity,
 				CompanyName = companyInfo.Name,
@@ -34,7 +34,9 @@ namespace StocksApp.ViewComponents
 				FinnhubIndustry = companyInfo.FinnhubIndustry,
 			};
 
-			return View("_CompanyAndStockDetails", companyAndStockDetails);
+				return View("_CompanyAndStockDetails", companyAndStockDetails);
+			}
+			return null;
 		}
 	}
 }

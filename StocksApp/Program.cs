@@ -23,7 +23,10 @@ if (builder.Environment.IsDevelopment())
 {
 	app.UseDeveloperExceptionPage();
 }
-
+if (builder.Environment.IsDevelopment())
+{
+	app.UseDeveloperExceptionPage();
+}
 app.UseStaticFiles();
 app.MapControllers();
 app.UseRotativa();

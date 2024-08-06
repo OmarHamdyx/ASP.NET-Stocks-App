@@ -18,9 +18,9 @@ namespace StocksApplicationTest.StocksServiceTest
         private readonly IFixture _fixture;
         private readonly Mock<IStocksAppRepository> _stocksAppRepositoryMock;
         //DbMock
-        private readonly IConfiguration _configuration;
-        private readonly DbContextMock<MsSqlServerDbContext> _dbContextMock;
-        private readonly MsSqlServerDbContext _dbContext;
+        //private readonly IConfiguration _configuration;
+        //private readonly DbContextMock<MsSqlServerDbContext> _dbContextMock;
+        //private readonly MsSqlServerDbContext _dbContext;
 
         public StocksServiceTest()
         {
@@ -80,7 +80,7 @@ namespace StocksApplicationTest.StocksServiceTest
             await action.Should().ThrowAsync<ArgumentException>();
         }
         [Fact]
-        public async void CreateBuyOrderAsync_WhenPriceInBuyOrderRequestIsZero_ToThrowArgumentException()
+        public async Task CreateBuyOrderAsync_WhenPriceInBuyOrderRequestIsZero_ToThrowArgumentException()
         {
             BuyOrderRequest? buyOrderRequest = _fixture.Build<BuyOrderRequest>().With(buyOrderRequest => buyOrderRequest.Price, 0).Create();
             Func<Task> action = async () => { await _stocksService.CreateBuyOrderAsync(buyOrderRequest); };
