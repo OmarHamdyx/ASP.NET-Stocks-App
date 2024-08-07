@@ -7,8 +7,8 @@ namespace Application.Services
 {
 	public class StocksService : IStocksService
 	{
-		private readonly List<BuyOrder> _buyOrders;
-		private readonly List<SellOrder> _sellOrders;
+		//private readonly List<BuyOrder> _buyOrders;
+		//private readonly List<SellOrder> _sellOrders;
 		private readonly IStocksAppRepository _stocksAppRepository;
 		
 
@@ -29,7 +29,7 @@ namespace Application.Services
 				buyOrderRequest.StockSymbol is null ||
 				buyOrderRequest.DateAndTimeOfOrder < DateTime.Parse("2000-01-01")) 
 			{
-				throw new ArgumentException(nameof(buyOrderRequest));	
+				throw new ArgumentException(null, nameof(buyOrderRequest));	
 			}
 			
 			//BuyOrder buyOrder = buyOrderRequest.ToBuyOrder();
@@ -49,7 +49,7 @@ namespace Application.Services
 				sellOrderRequest.StockSymbol is null ||
 				sellOrderRequest.DateAndTimeOfOrder < DateTime.Parse("2000-01-01"))
 			{
-				throw new ArgumentException(nameof(sellOrderRequest));
+				throw new ArgumentException(null, nameof(sellOrderRequest));
 			}
 			//SellOrder sellOrder = sellOrderRequest.ToSellOrder();
 			//_sellOrders.Add(sellOrder);
@@ -57,7 +57,7 @@ namespace Application.Services
 			return await _stocksAppRepository.PostSellOrderAsync(sellOrderRequest);	
 		}
 
-		public async  Task<List<BuyOrderResponse?>?> GetBuyOrdersAsync()
+		public async  Task<List<BuyOrderResponse?>> GetBuyOrdersAsync()
 		{
 			//List<BuyOrderResponse?>? buyOrderResponses = new List<BuyOrderResponse?>();
 			//foreach (BuyOrder buyOrder in _buyOrders) 
@@ -68,7 +68,7 @@ namespace Application.Services
 			return await _stocksAppRepository.GetBuyOrdersAsync();
 		}
 
-		public async Task<List<SellOrderResponse?>?> GetSellOrdersAsync()
+		public async Task<List<SellOrderResponse?>> GetSellOrdersAsync()
 		{
 			//List<SellOrderResponse?>? sellOrderResponses = new List<SellOrderResponse?>();
 			//foreach (SellOrder sellOrder in _sellOrders) 

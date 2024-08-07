@@ -183,8 +183,7 @@ namespace StocksApplicationTest.StocksAppControllerTest
             redirectToActionResult.ActionName.Should().Be("GetStockDetails");
 
             redirectToActionResult.RouteValues.Should().ContainKey("Quantity");
-            if (redirectToActionResult.RouteValues is not null)
-                redirectToActionResult.RouteValues["Quantity"].Should().Be(stockDetailsViewModel.Quantity);
+            redirectToActionResult.RouteValues?["Quantity"].Should().Be(stockDetailsViewModel.Quantity);
 
         }
 
