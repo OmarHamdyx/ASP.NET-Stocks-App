@@ -3,19 +3,14 @@ using Application.Interfaces;
 using Application.Services;
 using AutoFixture;
 using Domain.Entities;
-using EntityFrameworkCoreMock;
 using FluentAssertions;
-using Infrastructure.DbContexts;
-using Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Moq;
 namespace StocksApplicationTest.StocksServiceTest
 {
     public class StocksServiceTest
     {
-        private readonly IStocksService _stocksService;
-        private readonly IFixture _fixture;
+        private readonly StocksService _stocksService;
+        private readonly Fixture _fixture;
         private readonly Mock<IStocksAppRepository> _stocksAppRepositoryMock;
         //DbMock
         //private readonly IConfiguration _configuration;
@@ -114,7 +109,7 @@ namespace StocksApplicationTest.StocksServiceTest
         {
             BuyOrderRequest buyOrderRequest = _fixture.Create<BuyOrderRequest>();
             BuyOrder buyOrder = buyOrderRequest.ToBuyOrder();
-            BuyOrderResponse expectedBuyOrderResponse = buyOrder.ToBuyOrderResponse();
+            BuyOrderResponse? expectedBuyOrderResponse = buyOrder.ToBuyOrderResponse();
 
             _stocksAppRepositoryMock.Setup(stocksAppRepository => stocksAppRepository.PostBuyOrderAsync(It.IsAny<BuyOrderRequest>())).ReturnsAsync(expectedBuyOrderResponse);
 
@@ -206,7 +201,7 @@ namespace StocksApplicationTest.StocksServiceTest
         {
             SellOrderRequest sellOrderRequest = _fixture.Create<SellOrderRequest>();
             SellOrder sellOrder = sellOrderRequest.ToSellOrder();
-            SellOrderResponse expectedSellOrderResponse = sellOrder.ToSellOrderResponse();
+            SellOrderResponse? expectedSellOrderResponse = sellOrder.ToSellOrderResponse();
 
             _stocksAppRepositoryMock.Setup(stocksAppRepository => stocksAppRepository.PostSellOrderAsync(It.IsAny<SellOrderRequest>())).ReturnsAsync(expectedSellOrderResponse);
 
@@ -217,7 +212,7 @@ namespace StocksApplicationTest.StocksServiceTest
         [Fact]
         public async Task GetBuyOrdersAsync_WhenBuyOrdersListIsEmpty()
         {
-            List<BuyOrderResponse> expectedBuyOrderResponses = [];
+            List<BuyOrderResponse?> expectedBuyOrderResponses = [];
             _stocksAppRepositoryMock.Setup(stocksAppRepository => stocksAppRepository.GetBuyOrdersAsync()).ReturnsAsync(expectedBuyOrderResponses);
             List<BuyOrderResponse?>? actualBuyOrderResponses = await _stocksService.GetBuyOrdersAsync();
             actualBuyOrderResponses.Should().BeEquivalentTo(expectedBuyOrderResponses);
@@ -227,11 +222,11 @@ namespace StocksApplicationTest.StocksServiceTest
         {
             List<BuyOrderRequest> buyOrderRequests = _fixture.CreateMany<BuyOrderRequest>(10).ToList();
             List<BuyOrder> buyOrders = buyOrderRequests.Select(buyOrderRequest => buyOrderRequest.ToBuyOrder()).ToList();
-            List<BuyOrderResponse> expectedBuyOrderResponses = buyOrders.Select(buyOrder => buyOrder.ToBuyOrderResponse()).ToList();
+            List<BuyOrderResponse?> expectedBuyOrderResponses = buyOrders.Select(buyOrder => buyOrder.ToBuyOrderResponse()).ToList();
 
             _stocksAppRepositoryMock.Setup(stocksAppRepository => stocksAppRepository.GetBuyOrdersAsync()).ReturnsAsync(expectedBuyOrderResponses);
 
-            List<BuyOrderResponse?>? actualBuyOrderResponses = await _stocksService.GetBuyOrdersAsync();
+            List<BuyOrderResponse?> actualBuyOrderResponses = await _stocksService.GetBuyOrdersAsync();
 
             actualBuyOrderResponses.Should().BeEquivalentTo(expectedBuyOrderResponses);
 
@@ -239,7 +234,7 @@ namespace StocksApplicationTest.StocksServiceTest
         [Fact]
         public async Task GetSellOrdersAsync_WhenSellOrdersListIsEmpty()
         {
-            List<SellOrderResponse> expectedSellOrderResponses = new List<SellOrderResponse>();
+            List<SellOrderResponse?> expectedSellOrderResponses = new List<SellOrderResponse?>();
             _stocksAppRepositoryMock.Setup(stocksAppRepositoryMock => stocksAppRepositoryMock.GetSellOrdersAsync()).ReturnsAsync(expectedSellOrderResponses);
 
             List<SellOrderResponse?>? actualSellOrderResponses = await _stocksService.GetSellOrdersAsync();
@@ -261,11 +256,11 @@ namespace StocksApplicationTest.StocksServiceTest
                 Price = sellOrderRequest.Price
             }).ToList();
 
-            List<SellOrderResponse> expectedSellOrderResponses = sellOrders.Select(sellOrder => sellOrder.ToSellOrderResponse()).ToList();
+            List<SellOrderResponse?> expectedSellOrderResponses = sellOrders.Select(sellOrder => sellOrder.ToSellOrderResponse()).ToList();
 
             _stocksAppRepositoryMock.Setup(stocksService => stocksService.GetSellOrdersAsync()).ReturnsAsync(expectedSellOrderResponses);
 
-            List<SellOrderResponse?>? actualSellOrderResponses = await _stocksService.GetSellOrdersAsync();
+            List<SellOrderResponse?> actualSellOrderResponses = await _stocksService.GetSellOrdersAsync();
 
             actualSellOrderResponses.Should().BeEquivalentTo(expectedSellOrderResponses);
         }

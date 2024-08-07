@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using SerilogTimings;
 using StocksApp.Factories;
+using StocksApp.ExtentionMethods;
 namespace StocksApp.Controllers
 {
     [Controller]
@@ -41,7 +42,7 @@ namespace StocksApp.Controllers
         [LoggerFilterFactory(1, "Called GetStockDetails")]
         public async Task<IActionResult?> GetStockDetails(string? stockSymbol, List<string?>? errors, int quantity = 100)
         {
-
+            ViewBag.Errors = errors;    
             if (_currentStockDetails.ErrorFlag is true && stockSymbol is null)
             {
                 _currentStockDetails.ErrorFlag = false;
@@ -157,7 +158,6 @@ namespace StocksApp.Controllers
 
                 SellOrders = await _stocksService.GetSellOrdersAsync()
             };
-
             return View("Orders", ordersViewModel);
         }
         [HttpGet("[Action]")]

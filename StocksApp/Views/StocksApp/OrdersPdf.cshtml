@@ -1,99 +1,111 @@
 ﻿@model OrdersViewModel
 @{
-	Layout = null;
+    Layout = null;
 }
 <link href=@("http://" + Context.Request.Host.ToString() + "/Css/TailwindOutput.css") rel="stylesheet" />
 
-<div class="relative mt-8 overflow-x-auto">
-	<h2 class="text-lg font-semibold text-gray-800">Sell Orders</h2>
-	<table class="w-full text-left text-sm text-gray-400 rtl:text-right">
-		<thead class="bg-gray-700 text-xs uppercase text-gray-400">
-			<tr>
-				<th scope="col" class="px-6 py-3">Order ID</th>
-				<th scope="col" class="px-6 py-3">Stock Symbol</th>
-				<th scope="col" class="px-6 py-3">Stock Name</th>
-				<th scope="col" class="px-6 py-3">Date and Time of Order</th>
-				<th scope="col" class="px-6 py-3">Quantity</th>
-				<th scope="col" class="px-6 py-3">Price</th>
-				<th scope="col" class="px-6 py-3">Trade Amount</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var sellOrder in Model.SellOrders)
-			{
-				<tr class="border-b border-gray-700 bg-gray-800">
-					<th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-white">
-						@sellOrder.SellOrderID
-					</th>
-					<td class="px-6 py-4">
-						@sellOrder.StockSymbol
-					</td>
-					<td class="px-6 py-4">
-						@sellOrder.StockName
-					</td>
-					<td class="px-6 py-4">
-						@sellOrder.DateAndTimeOfOrder
-					</td>
-					<td class="px-6 py-4">
-						@sellOrder.Quantity
-					</td>
-					<td class="px-6 py-4">
-						@sellOrder.Price
-					</td>
-					<td class="px-6 py-4">
-						@sellOrder.TradeAmount
-					</td>
-				</tr>
-			}
-		</tbody>
-	</table>
-</div>
-<div class="relative mt-8 overflow-x-auto">
-	<h2 class="text-lg font-semibold text-gray-800">Buy Orders</h2>
-	<table class="w-full text-left text-sm text-gray-400 rtl:text-right">
-		<thead class="bg-gray-700 text-xs uppercase text-gray-400">
-			<tr>
-				<th scope="col" class="px-6 py-3">Order ID</th>
-				<th scope="col" class="px-6 py-3">Stock Symbol</th>
-				<th scope="col" class="px-6 py-3">Stock Name</th>
-				<th scope="col" class="px-6 py-3">Date and Time of Order</th>
-				<th scope="col" class="px-6 py-3">Quantity</th>
-				<th scope="col" class="px-6 py-3">Price</th>
-				<th scope="col" class="px-6 py-3">Trade Amount</th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach (var buyOrder in Model.BuyOrders)
-			{
-				<tr class="border-b border-gray-700 bg-gray-800">
-					<th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-white">
-						@buyOrder.BuyOrderID
-					</th>
-					<td class="px-6 py-4">
-						@buyOrder.StockSymbol
-					</td>
-					<td class="px-6 py-4">
-						@buyOrder.StockName
-					</td>
-					<td class="px-6 py-4">
-						@buyOrder.DateAndTimeOfOrder
-					</td>
-					<td class="px-6 py-4">
-						@buyOrder.Quantity
-					</td>
-					<td class="px-6 py-4">
-						@buyOrder.Price
-					</td>
-					<td class="px-6 py-4">
-						@buyOrder.TradeAmount
-					</td>
-				</tr>
-			}
-		</tbody>
-	</table>
-</div>
+@if (Model.SellOrders is not null && Model.BuyOrders is not null)
+{
+    <div class="relative mt-8 overflow-x-auto">
+        <h2 class="text-lg font-semibold text-gray-800">Sell Orders</h2>
+        <table class="w-full text-left text-sm text-gray-400 rtl:text-right">
+            <thead class="bg-gray-700 text-xs uppercase text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Order ID</th>
+                    <th scope="col" class="px-6 py-3">Stock Symbol</th>
+                    <th scope="col" class="px-6 py-3">Stock Name</th>
+                    <th scope="col" class="px-6 py-3">Date and Time of Order</th>
+                    <th scope="col" class="px-6 py-3">Quantity</th>
+                    <th scope="col" class="px-6 py-3">Price</th>
+                    <th scope="col" class="px-6 py-3">Trade Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (SellOrderResponse? sellOrder in Model.SellOrders)
+                {
+                    if (sellOrder is not null)
+                    {
+                        <tr class="border-b border-gray-700 bg-gray-800">
+                            <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-white">
+                                @sellOrder.SellOrderID
+                            </th>
+                            <td class="px-6 py-4">
+                                @sellOrder.StockSymbol
+                            </td>
+                            <td class="px-6 py-4">
+                                @sellOrder.StockName
+                            </td>
+                            <td class="px-6 py-4">
+                                @sellOrder.DateAndTimeOfOrder
+                            </td>
+                            <td class="px-6 py-4">
+                                @sellOrder.Quantity
+                            </td>
+                            <td class="px-6 py-4">
+                                @sellOrder.Price
+                            </td>
+                            <td class="px-6 py-4">
+                                @sellOrder.TradeAmount
+                            </td>
+                        </tr>
+                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="relative mt-8 overflow-x-auto">
+        <h2 class="text-lg font-semibold text-gray-800">Buy Orders</h2>
+        <table class="w-full text-left text-sm text-gray-400 rtl:text-right">
+            <thead class="bg-gray-700 text-xs uppercase text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">Order ID</th>
+                    <th scope="col" class="px-6 py-3">Stock Symbol</th>
+                    <th scope="col" class="px-6 py-3">Stock Name</th>
+                    <th scope="col" class="px-6 py-3">Date and Time of Order</th>
+                    <th scope="col" class="px-6 py-3">Quantity</th>
+                    <th scope="col" class="px-6 py-3">Price</th>
+                    <th scope="col" class="px-6 py-3">Trade Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var buyOrder in Model.BuyOrders)
+                {
+                    if (buyOrder is not null)
+                    {
+                        <tr class="border-b border-gray-700 bg-gray-800">
+                            <th scope="row" class="whitespace-nowrap px-6 py-4 font-medium text-white">
+                                @buyOrder.BuyOrderID
+                            </th>
+                            <td class="px-6 py-4">
+                                @buyOrder.StockSymbol
+                            </td>
+                            <td class="px-6 py-4">
+                                @buyOrder.StockName
+                            </td>
+                            <td class="px-6 py-4">
+                                @buyOrder.DateAndTimeOfOrder
+                            </td>
+                            <td class="px-6 py-4">
+                                @buyOrder.Quantity
+                            </td>
+                            <td class="px-6 py-4">
+                                @buyOrder.Price
+                            </td>
+                            <td class="px-6 py-4">
+                                @buyOrder.TradeAmount
+                            </td>
+                        </tr>
+                    }
+
+                }
+            </tbody>
+        </table>
+    </div>
 
 
+
+}
 
 
 
