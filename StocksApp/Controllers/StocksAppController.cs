@@ -40,12 +40,12 @@ namespace StocksApp.Controllers
         //[HttpGet("[Action]/{stockSymbol}")]
         [GetStockDetailsFilterFactory(1)]
         [LoggerFilterFactory(1, "Called GetStockDetails")]
-        public async Task<IActionResult?> GetStockDetails(string? stockSymbol, List<string?>? errors, int quantity = 100)
+        public async Task<IActionResult> GetStockDetails(string? stockSymbol, List<string?>? errors, int quantity = 100)
         {
-            ViewBag.Errors = errors;    
-            if (_currentStockDetails.ErrorFlag is true && stockSymbol is null)
-            {
-                _currentStockDetails.ErrorFlag = false;
+            ViewBag.Errors = errors;
+			if (_currentStockDetails.ErrorFlag && stockSymbol == null)
+			{
+				_currentStockDetails.ErrorFlag = false;
                 return View("NoStockFoundError");
             }
             if (stockSymbol is not null || (_currentStockDetails.StockSymbol is null && stockSymbol is null))
@@ -142,7 +142,7 @@ namespace StocksApp.Controllers
 
                 return RedirectToAction("GetStockDetails", new { Quantity = stockDetailsViewModel.Quantity });
             }
-            return null;
+            return BadRequest();
 
         }
 
@@ -192,11 +192,11 @@ namespace StocksApp.Controllers
                 };
                 return View("ExplorePage", companyOptionsViewModel);
             }
-            return null;
+			return BadRequest();
 
-        }
+		}
 
-        [HttpGet("[Action]/{stockSymbol}")]
+		[HttpGet("[Action]/{stockSymbol}")]
         [LoggerFilterFactory(1, "Called GetCompanyAndStockDetailsInExplore")]
 
         public IActionResult? GetCompanyAndStockDetailsInExplore(string? stockSymbol)
@@ -212,9 +212,9 @@ namespace StocksApp.Controllers
                 };
                 return View("ExplorePage", companyOptionsViewModel);
             }
-            return null;
+			return BadRequest();
 
-        }
-    }
+		}
+	}
 }
 
