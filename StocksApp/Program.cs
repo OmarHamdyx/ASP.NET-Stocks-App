@@ -33,5 +33,6 @@ app.UseRotativa();
 app.UseSerilogRequestLogging();
 app.Run();
 
+
 public partial class Program { } //make the auto-generated Program accessible programmatically from any project
 
