@@ -1,0 +1,23 @@
+﻿@{
+    ViewBag.Title = "Error";
+}
+
+<div class="flex min-h-screen items-center justify-center p-4">
+    <div class="mx-auto max-w-lg rounded-lg bg-white p-8 shadow-lg">
+        <h1 class="mb-4 text-4xl font-bold text-red-600">Oops!</h1>
+        <p class="mb-4 text-lg text-gray-700">Something went wrong. Please try again later.</p>
+        <p class="text-sm text-gray-500">
+            <strong>Error:</strong> @{
+                var errorMessage = ViewBag.ErrorMessage as string;
+                if (string.IsNullOrEmpty(errorMessage))
+                {
+                    errorMessage = "An unknown error occurred.";
+                }
+                @errorMessage
+            }
+        </p>
+        <a href="/" class="mt-6 inline-block rounded-lg bg-blue-500 px-4 py-2 text-white hover:bg-blue-600">
+            Back to Home
+        </a>
+    </div>
+</div>

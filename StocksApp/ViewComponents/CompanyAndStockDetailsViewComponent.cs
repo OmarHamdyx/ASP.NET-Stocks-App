@@ -2,6 +2,7 @@
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using StocksApp.ExtentionMethods;
 using StocksApp.ViewModels;
 
 namespace StocksApp.ViewComponents
@@ -22,7 +23,7 @@ namespace StocksApp.ViewComponents
 			StockModel? stockInfo = await _finhubbService.GetStockInfoAsync(stockSymbol);
 			CompanyModel? companyInfo = await _finhubbService.GetCompanyInfoAsync(stockSymbol);
 
-			if (companyInfo is not null && stockInfo is not null)
+			if (companyInfo is not null && stockInfo is not null && companyInfo.AreAllPropertiesNotNull() && stockInfo.AreAllPropertiesNotNull())
 			{CompanyAndStockDetails companyAndStockDetails = new()
 			{
 				Quantity = (int)_tradingOptions.Value.DefaultOrderQuantity,
@@ -36,7 +37,7 @@ namespace StocksApp.ViewComponents
 
 				return View("_CompanyAndStockDetails", companyAndStockDetails);
 			}
-			return null;
+			return View("_Null");
 		}
 	}
 }
