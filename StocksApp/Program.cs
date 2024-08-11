@@ -15,22 +15,31 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpClient();
 builder.Services.AddControllersWithViews();
-builder.Services.ConfigureMyServices(builder.Configuration,builder.Host);
+builder.Services.ConfigureMyServices(builder.Configuration, builder.Host);
 
 var app = builder.Build();
 
 if (builder.Environment.IsDevelopment())
 {
-	app.UseDeveloperExceptionPage();
+    app.UseDeveloperExceptionPage();
 }
-if (builder.Environment.IsDevelopment())
+else
 {
-	app.UseDeveloperExceptionPage();
+    app.UseExceptionHandler("/Error");
+    app.UseExceptionHandlingMiddleware();
 }
-app.UseStaticFiles();
-app.MapControllers();
-app.UseRotativa();
 app.UseSerilogRequestLogging();
+
+// Serve static files
+app.UseStaticFiles();
+
+// Rotativa middleware for PDF generation
+app.UseRotativa();
+
+// Map controller routes
+app.MapControllers();
+
+// Terminate the middleware pipeline
 app.Run();
 
 
