@@ -1,14 +1,5 @@
-using Domain.Entities;
-using Application.Services;
-using Application.Interfaces;
-using Infrastructure.DbContexts;
-using Microsoft.EntityFrameworkCore;
-using Infrastructure.Repositories;
 using Rotativa.AspNetCore;
-using Microsoft.AspNetCore.HttpLogging;
 using Serilog;
-using StocksApp.Factories;
-using StocksApp.Filters;
 using StocksApp.ExtentionMethods;
 
 var builder = WebApplication.CreateBuilder(args);

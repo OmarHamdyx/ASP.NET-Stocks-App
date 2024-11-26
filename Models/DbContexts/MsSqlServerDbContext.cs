@@ -1,13 +1,9 @@
-﻿using Application.DtoModels;
-using Domain.Entities;
-using Microsoft.Data.SqlClient;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
-using System.Security.Cryptography;
 
 namespace Infrastructure.DbContexts
 {
-	public class MsSqlServerDbContext : DbContext
+    public class MsSqlServerDbContext : DbContext
 	{
 		public DbSet<BuyOrder> BuyOrders { get; set; }
 		public DbSet<SellOrder> SellOrders { get; set; }

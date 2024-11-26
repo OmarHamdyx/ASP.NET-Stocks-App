@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.Extensions.Configuration;
 using StocksApp.Controllers;
 
 public class GetStockDetailsFilter : IAsyncActionFilter, IOrderedFilter
