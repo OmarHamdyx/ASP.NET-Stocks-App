@@ -1,18 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using StocksApp.ViewModels;
+﻿using Application.DtoModels;
 using Application.Interfaces;
 using Domain.Entities;
-using Application.DtoModels;
-using Rotativa.AspNetCore;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Rotativa.AspNetCore;
 using Serilog;
 using SerilogTimings;
 using StocksApp.Factories;
-using StocksApp.ExtentionMethods;
-using Microsoft.AspNetCore.Diagnostics;
+using StocksApp.ViewModels;
 namespace StocksApp.Controllers
 {
-	[Controller]
+    [Controller]
 	[Route("[Controller]")]
 	//Parent route
 	public class StocksAppController : Controller

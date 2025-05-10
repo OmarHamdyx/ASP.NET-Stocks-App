@@ -3,17 +3,18 @@ using Domain.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure.Internal;
+using Microsoft.EntityFrameworkCore.Metadata;
 using System.Security.Cryptography;
 
 namespace Infrastructure.DbContexts
 {
 	public class MsSqlServerDbContext : DbContext
 	{
-		public DbSet<BuyOrder> BuyOrders { get; set; }
-		public DbSet<SellOrder> SellOrders { get; set; }
-		public DbSet<User> Users { get; set; }
-		public DbSet<UserBuyOrder> UserBuyOrders { get; set; }
-		public DbSet<UserSellOrder> UserSellOrders { get; set; }
+		public DbSet<BuyOrder>? BuyOrders { get; set; }
+		public DbSet<SellOrder>? SellOrders { get; set; }
+		public DbSet<User>? Users { get; set; }
+		public DbSet<UserBuyOrder>? UserBuyOrders { get; set; }
+		public DbSet<UserSellOrder>? UserSellOrders { get; set; }
 
 		public MsSqlServerDbContext(DbContextOptions options) : base(options)
 		{
